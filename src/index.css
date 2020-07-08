@@ -1,0 +1,34 @@
+body {
+  margin: 0;
+  font-family:'Roboto', sans-serif!important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: 'Roboto', sans-serif!important;
+}
+
+:root {
+  --main-color:#2A65EA!important;
+  --main-color-2:#013654!important;
+  --secondary-color:#4A4C4B!important;
+
+}
+
+.color-main {
+  color:var(--main-color);
+}
+.bg-main {
+  background:var(--main-color);
+}
+
+
+.color-main-2 {
+  color:var(--main-color-2);
+
+}
+.secondary-color {
+  color:var(--secondary-color);
+
+}

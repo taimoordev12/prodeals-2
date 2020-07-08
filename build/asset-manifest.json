@@ -1,0 +1,30 @@
+{
+  "files": {
+    "main.css": "/prodeals/static/css/main.3aef6fce.chunk.css",
+    "main.js": "/prodeals/static/js/main.47bac7ee.chunk.js",
+    "main.js.map": "/prodeals/static/js/main.47bac7ee.chunk.js.map",
+    "runtime-main.js": "/prodeals/static/js/runtime-main.1a60acef.js",
+    "runtime-main.js.map": "/prodeals/static/js/runtime-main.1a60acef.js.map",
+    "static/css/2.f054ae92.chunk.css": "/prodeals/static/css/2.f054ae92.chunk.css",
+    "static/js/2.054c9f02.chunk.js": "/prodeals/static/js/2.054c9f02.chunk.js",
+    "static/js/2.054c9f02.chunk.js.map": "/prodeals/static/js/2.054c9f02.chunk.js.map",
+    "index.html": "/prodeals/index.html",
+    "precache-manifest.fbb020ceb1c768283a1aea6ad7aed697.js": "/prodeals/precache-manifest.fbb020ceb1c768283a1aea6ad7aed697.js",
+    "service-worker.js": "/prodeals/service-worker.js",
+    "static/css/2.f054ae92.chunk.css.map": "/prodeals/static/css/2.f054ae92.chunk.css.map",
+    "static/css/main.3aef6fce.chunk.css.map": "/prodeals/static/css/main.3aef6fce.chunk.css.map",
+    "static/js/2.054c9f02.chunk.js.LICENSE.txt": "/prodeals/static/js/2.054c9f02.chunk.js.LICENSE.txt",
+    "static/media/ComparisonBanner.png": "/prodeals/static/media/ComparisonBanner.3bea7caa.png",
+    "static/media/Inspectionbanner.png": "/prodeals/static/media/Inspectionbanner.bb6a8754.png",
+    "static/media/HomeBanner.style.css": "/prodeals/static/media/banner.63e2f6dd.jpg",
+    "static/media/car1.jpg": "/prodeals/static/media/car1.99900664.jpg",
+    "static/media/styles.css": "/prodeals/static/media/revicons.2feb69cc.eot"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.1a60acef.js",
+    "static/css/2.f054ae92.chunk.css",
+    "static/js/2.054c9f02.chunk.js",
+    "static/css/main.3aef6fce.chunk.css",
+    "static/js/main.47bac7ee.chunk.js"
+  ]
+}

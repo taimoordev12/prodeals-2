@@ -1,0 +1,15 @@
+.bg-img {
+    background-image: url("../../images/banner.jpg");
+    height: 600px;
+    background-position: center center;
+  
+    /* Background image doesn't tile */
+    background-repeat: no-repeat;
+    background-size: cover;
+  
+
+}
+.padding-0{
+    padding-right:0px!important;
+    padding-left:0px!important;
+}

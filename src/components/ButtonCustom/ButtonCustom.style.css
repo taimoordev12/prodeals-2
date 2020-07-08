@@ -1,0 +1,21 @@
+.mainButton {
+    background-color: var(--main-color);
+    color: white;
+    padding: 10px 20px;
+    border: 1px var(--main-color)solid!important;
+}
+
+.mainButton:hover {
+    background-color: white;
+    color: var(--main-color);
+    border: 1px var(--main-color)solid!important;
+    box-shadow: darkgray 0px 0px;
+    transition: 0.4s;
+    font-weight: bolder;
+
+}
+
+.longbtn{
+    padding-left: 80px;
+    padding-right: 80px;
+}

@@ -1,0 +1,15 @@
+.react-multiple-carousel__arrow--right {
+    right: calc(0% + 9px)!important;
+    top: 30%;
+}
+.react-multiple-carousel__arrow--left {
+    left: calc(0% + 10px)!important;
+    top: 30%;
+}
+.react-multiple-carousel__arrow {
+  
+    background:var(--main-color)!important;
+    min-width: 25px!important;
+    min-height: 21px!important;
+   
+}

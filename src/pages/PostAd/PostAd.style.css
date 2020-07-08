@@ -1,0 +1,36 @@
+
+.ad-input {
+    border:1px solid var(--main-color)!important;
+
+}
+.input-add{
+    border:1px solid var(--main-color)!important;
+}
+.year-picker {
+   padding: 10px 0;
+    width: 100%!important;
+    
+    border:1px solid var(--main-color)!important;
+}
+
+.bg-ad{
+    background-image: url('../../images/bg1.jpg');
+    background-position: center center;
+  
+    background-repeat: no-repeat;
+    
+    /* Background image is fixed in the viewport so that it doesn't move when 
+       the content's height is greater than the image's height */
+    background-attachment: fixed;
+    
+    /* This is what makes the background image rescale based
+       on the container's size */
+    background-size: cover;
+}
+
+.bg-adsection:hover {
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.175);
+    transition-duration: 0.2s;
+    transition-timing-function: ease-in;
+
+}
