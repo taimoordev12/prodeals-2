@@ -9,6 +9,8 @@ import AccesoryInformationPage from '../src/pages/AccesoryInformationPage/Acceso
 import InspectionFormPage from '../src/pages/InspectionFormPage/InspectionFormPage.component';
 import PostAd from '../src/pages/PostAd/PostAd.component';
 import SearchPage from './pages/SearchPage/SearchPage.component';
+import ProductDescriptionPage from './pages/ProductDescription/ProductDescription.component';
+
 const App=()=> {
   return (
     <React.Fragment>
@@ -21,6 +23,8 @@ const App=()=> {
     <Route path={`${process.env.PUBLIC_URL}/inspectionform`} component={InspectionFormPage}/> 
     <Route path={`${process.env.PUBLIC_URL}/postad`} component={PostAd}/> 
     <Route path={`${process.env.PUBLIC_URL}/search`} component={SearchPage}/> 
+    <Route path={`${process.env.PUBLIC_URL}/product/description`} component={ProductDescriptionPage}/> 
+
 
 
 
