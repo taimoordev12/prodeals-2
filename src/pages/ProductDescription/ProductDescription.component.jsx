@@ -5,66 +5,73 @@ import {Button,
 Card,
 CardTitle,
 CardText,
-Row, Col , Carousel,
-CarouselItem,
-CarouselControl,
-CarouselIndicators,
-CarouselCaption} from 'reactstrap';
+Row, Col} from 'reactstrap';
+// import {Button,
+//   Card,
+//   CardTitle,
+//   CardText,
+//   Row, Col , Carousel,
+//   CarouselItem,
+//   CarouselControl,
+//   CarouselIndicators,
+//   CarouselCaption} from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLocationArrow, faPhone, faCar, faUser, faCalendar, faGasPump, faCog} from '@fortawesome/free-solid-svg-icons';
 import Axios from '../../axios';
+import { Carousel } from 'react-responsive-carousel';
 
 // import { faTachometer} from '@fortawesome/react-fontawesome'
 
 const ProductDescripton=(props)=> {
-    const items = [
-        {
-          src: "https://images.unsplash.com/photo-1542362567-b07e54358753?ixlib=rb-1.2.1&w=1000&q=80"
-        },
-        {
-          src: "https://www.extremetech.com/wp-content/uploads/2019/12/SONATA-hero-option1-764A5360-edit.jpg"
-        },
-        {
-          src: "https://www.autocar.co.uk/sites/autocar.co.uk/files/images/car-reviews/first-drives/legacy/large-2479-s-classsaloon.jpg"
-        }
-      ];
-      
+
       // states
       const [activeIndex, setActiveIndex] = useState(0);
       const [animating, setAnimating] = useState(false);
       const [searchedCarData, setsearchedCarData] = React.useState([])
       // states
       
-      // functions
-      const next = () => {
-        if (animating) return;
-        const nextIndex = activeIndex === items.length - 1 ? 0 : activeIndex + 1;
-        setActiveIndex(nextIndex);
-      }
+      // const items = [
+      //   {
+      //     src: "http://localhost:4000/Routes/uploads/civic.jpg"
+      //   },
+      //   {
+      //     src: "https://www.extremetech.com/wp-content/uploads/2019/12/SONATA-hero-option1-764A5360-edit.jpg"
+      //   },
+      //   {
+      //     src: "https://www.autocar.co.uk/sites/autocar.co.uk/files/images/car-reviews/first-drives/legacy/large-2479-s-classsaloon.jpg"
+      //   },
+      // ];
+
+      // // functions
+      // const next = () => {
+      //   if (animating) return;
+      //   const nextIndex = activeIndex === items.length - 1 ? 0 : activeIndex + 1;
+      //   setActiveIndex(nextIndex);
+      // }
     
-      const previous = () => {
-        if (animating) return;
-        const nextIndex = activeIndex === 0 ? items.length - 1 : activeIndex - 1;
-        setActiveIndex(nextIndex);
-      }
+      // const previous = () => {
+      //   if (animating) return;
+      //   const nextIndex = activeIndex === 0 ? items.length - 1 : activeIndex - 1;
+      //   setActiveIndex(nextIndex);
+      // }
     
-      const goToIndex = (newIndex) => {
-        if (animating) return;
-        setActiveIndex(newIndex);
-      }
+      // const goToIndex = (newIndex) => {
+      //   if (animating) return;
+      //   setActiveIndex(newIndex);
+      // }
     
-      const slides = items.map((item) => {
-        return (
-          <CarouselItem
-            onExiting={() => setAnimating(true)}
-            onExited={() => setAnimating(false)}
-            key={item.src}
-          >
-            <img className="SliderImages" src={item.src} alt={item.altText}/>
-            <CarouselCaption captionText={item.caption} captionHeader={item.caption} />
-          </CarouselItem>
-        );
-      });
+      // const slides = items.map((item) => {
+      //   return (
+      //     <CarouselItem
+      //       onExiting={() => setAnimating(true)}
+      //       onExited={() => setAnimating(false)}
+      //       key={item.src}
+      //     >
+      //       <img className="SliderImages" src={item.src} alt={item.altText}/>
+      //       <CarouselCaption captionText={item.caption} captionHeader={item.caption} />
+      //     </CarouselItem>
+      //   );
+      // });
       React.useEffect(
         ()=>{
           Axios.get(`/specific/ad/${props.location.state.vehicleID}`)
@@ -87,7 +94,7 @@ const ProductDescripton=(props)=> {
                             <CardText className="ProductLocation">
                                 <FontAwesomeIcon icon={faLocationArrow} />
                                 <strong className="ml-1"> {searchedCarData.location} </strong></CardText>
-                                <Carousel
+                                {/* <Carousel
                                 activeIndex={activeIndex}
                                 next={next}
                                 previous={previous}
@@ -96,7 +103,16 @@ const ProductDescripton=(props)=> {
                                     {slides}
                                     <CarouselControl direction="prev" directionText="Previous" onClickHandler={previous} />
                                     <CarouselControl direction="next" directionText="Next" onClickHandler={next} />
-                                </Carousel>
+                                </Carousel> */}
+                                      <Carousel>
+                                        {searchedCarData && searchedCarData.images ? searchedCarData.images.map((image,index)=>(
+                                          <div>
+                                            <img className="" src={`http://localhost:4000/Routes/uploads/${image.filename}`} />
+                                          </div>
+                                        )) : null}
+                                    </Carousel>
+
+
                                 <Row className="mt-3">
                                 <Col md="3" sm="6" style={{border:"0.5px solid Gray", backgroundColor:"#e0e0e0", paddingTop:"20px", paddingBottom:"20px" }}>
                                     <div style={{textAlign:"center",marginTop:"15px"}}>
@@ -123,14 +139,14 @@ const ProductDescripton=(props)=> {
                                         <h4>{searchedCarData.transmission}</h4>
                                     </div>
                                 </Col>
-                                <div className=" container ">
+                                <div className=" container " style={{overflow:"auto"}}>
                                     <h4 className="DescriptionProductFeature my-4"> Features </h4>
                                     <Row >
                                         <Col md="12">
                                             <table className="TableStyles" style={{width:"100%"}}>
                                                 <tr>
                                                     <th className="TableStyles">Registered City</th>
-                                                    <td className="TableStyles" style={{textAlign:"right"}}>{searchedCarData.location}</td>
+                                                    <td className="TableStyles" style={{textAlign:"right"}}>{searchedCarData.registeration}</td>
                                                 </tr>
                                                 <tr>
                                                     <th className="TableStyles">Company</th>

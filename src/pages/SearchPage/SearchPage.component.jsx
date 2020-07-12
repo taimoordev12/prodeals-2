@@ -69,7 +69,7 @@ const SearchPage=()=> {
 
       React.useEffect(
         ()=>{
-          Axios.get("/vehi")
+          Axios.get("/vehicles")
          .then(res => {
               setLoader("true")
               setsearchCarData (res.data)
