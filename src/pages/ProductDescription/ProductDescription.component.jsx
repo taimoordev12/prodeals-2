@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { withRouter } from 'react-router-dom'
 import '../ProductDescription/ProductDescription.style.css';
 import {Button,
 Card,
@@ -11,9 +12,11 @@ CarouselIndicators,
 CarouselCaption} from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLocationArrow, faPhone, faCar, faUser, faCalendar, faGasPump, faCog} from '@fortawesome/free-solid-svg-icons';
+import Axios from '../../axios';
+
 // import { faTachometer} from '@fortawesome/react-fontawesome'
 
-const SearchPage=()=> {
+const ProductDescripton=(props)=> {
     const items = [
         {
           src: "https://images.unsplash.com/photo-1542362567-b07e54358753?ixlib=rb-1.2.1&w=1000&q=80"
@@ -25,9 +28,14 @@ const SearchPage=()=> {
           src: "https://www.autocar.co.uk/sites/autocar.co.uk/files/images/car-reviews/first-drives/legacy/large-2479-s-classsaloon.jpg"
         }
       ];
+      
+      // states
       const [activeIndex, setActiveIndex] = useState(0);
       const [animating, setAnimating] = useState(false);
-    
+      const [searchedCarData, setsearchedCarData] = React.useState([])
+      // states
+      
+      // functions
       const next = () => {
         if (animating) return;
         const nextIndex = activeIndex === items.length - 1 ? 0 : activeIndex + 1;
@@ -57,16 +65,28 @@ const SearchPage=()=> {
           </CarouselItem>
         );
       });
+      React.useEffect(
+        ()=>{
+          Axios.get(`/specific/ad/${props.location.state.vehicleID}`)
+         .then(res => {
+            setsearchedCarData (res.data[0])
+        })
+        .catch(err => {
+          console.log(err)
+        })
+       }, [])
+      // functions
+      console.log(searchedCarData)
     return (
        <div className="custom-container margin-class">
                 <Row>
                   <Col md="8" className="mt-3">
                     <Card className="DescriptionCard">
                         <div className="container">
-                            <CardText className="DescriptionProductTitle">With supporting text below as a natural</CardText>
+                            <CardText className="DescriptionProductTitle">{searchedCarData.name}</CardText>
                             <CardText className="ProductLocation">
                                 <FontAwesomeIcon icon={faLocationArrow} />
-                                <strong className="ml-1"> LAHORE </strong></CardText>
+                                <strong className="ml-1"> {searchedCarData.location} </strong></CardText>
                                 <Carousel
                                 activeIndex={activeIndex}
                                 next={next}
@@ -81,26 +101,26 @@ const SearchPage=()=> {
                                 <Col md="3" sm="6" style={{border:"0.5px solid Gray", backgroundColor:"#e0e0e0", paddingTop:"20px", paddingBottom:"20px" }}>
                                     <div style={{textAlign:"center",marginTop:"15px"}}>
                                         <FontAwesomeIcon icon={faCalendar} size="2x" />
-                                        <h4>2014</h4>
+                                        <h4>{searchedCarData.model}</h4>
                                     </div>
                                 </Col>
                                 <Col md="3" sm="6" style={{border:"0.5px solid Gray" , backgroundColor:"#e0e0e0", paddingTop:"20px", paddingBottom:"20px" }}>
                                     <div style={{textAlign:"center",marginTop:"15px"}}>
                                         <FontAwesomeIcon icon={faCar} size="2x" />
-                                        <h4>75000 KMs</h4>
+                                        <h4>{searchedCarData.mileage}KMs</h4>
                                     </div>
                                 </Col>
                                 <Col md="3" sm="6" style={{border:"0.5px solid Gray" , backgroundColor:"#e0e0e0", paddingTop:"20px", paddingBottom:"20px" }}>
                                     <div style={{textAlign:"center",marginTop:"15px"}}>
                                         <FontAwesomeIcon icon={faGasPump} size="2x" />
-                                        <h4>Petrol</h4>
+                                        <h4>{searchedCarData.engine}cc</h4>
 
                                     </div>
                                 </Col>
                                 <Col md="3" sm="6" style={{border:"0.5px solid Gray" , backgroundColor:"#e0e0e0", paddingTop:"20px", paddingBottom:"20px" }}>
                                     <div style={{textAlign:"center",marginTop:"15px"}}>
                                         <FontAwesomeIcon icon={faCog} size="2x" />
-                                        <h4>Manual</h4>
+                                        <h4>{searchedCarData.transmission}</h4>
                                     </div>
                                 </Col>
                                 <div className=" container ">
@@ -110,32 +130,23 @@ const SearchPage=()=> {
                                             <table className="TableStyles" style={{width:"100%"}}>
                                                 <tr>
                                                     <th className="TableStyles">Registered City</th>
-                                                    <td className="TableStyles" style={{textAlign:"right"}}>Lahore</td>
+                                                    <td className="TableStyles" style={{textAlign:"right"}}>{searchedCarData.location}</td>
                                                 </tr>
                                                 <tr>
-                                                    <th className="TableStyles">Assembly</th>
-                                                    <td className="TableStyles" style={{textAlign:"right"}}>Imported</td>
+                                                    <th className="TableStyles">Company</th>
+                                                    <td className="TableStyles" style={{textAlign:"right"}}>{searchedCarData.company}</td>
                                                 </tr>
-                                                <tr>
-                                                    <th className="TableStyles">Body Type</th>
-                                                    <td className="TableStyles" style={{textAlign:"right"}}>N/A</td>
-                                                </tr>
-
                                                 <tr>
                                                     <th className="TableStyles">Color</th>
-                                                    <td className="TableStyles" style={{textAlign:"right"}}>white</td>
+                                                    <td className="TableStyles" style={{textAlign:"right"}}>{searchedCarData.color}</td>
                                                 </tr>
                                                 <tr>
                                                     <th className="TableStyles">Engine Capacity</th>
-                                                    <td className="TableStyles" style={{textAlign:"right"}}>1600cc</td>
-                                                </tr>
-                                                <tr>
-                                                    <th className="TableStyles">Last Updated</th>
-                                                    <td className="TableStyles" style={{textAlign:"right"}}>Jul 06, 2020</td>
+                                                    <td className="TableStyles" style={{textAlign:"right"}}>{searchedCarData.mileage}cc</td>
                                                 </tr>
                                                 <tr>
                                                     <th className="TableStyles">Ad Ref #</th>
-                                                    <td className="TableStyles" style={{textAlign:"right"}}>4153927</td>
+                                                    <td className="TableStyles" style={{textAlign:"right"}}>{searchedCarData._id}</td>
                                                 </tr>
                                             </table>
                                         </Col>
@@ -144,12 +155,7 @@ const SearchPage=()=> {
                                 <div className="">
                                     <h4 className="DescriptionProductFeature container my-4"> Sellers Comments </h4>
                                     <div className="SellersComments">
-                                      <ul>
-                                        <li>Fog Lights</li>
-                                        <li>Lifetime token tax paid</li>
-                                        <li>Company Fitted Alloy Wheels</li>
-                                        <li>1st Owner</li>
-                                      </ul>
+                                    <p className="container">{searchedCarData.description}</p>
 
                                       <p className="container">Mention Prodeals when calling Seller to get a good deal.</p>
                                     </div>
@@ -162,7 +168,7 @@ const SearchPage=()=> {
                     <Row>
                       <Col xs="12">
                         <Card body className="CardStyles text-center">
-                          <h3 className="PriceCard"> PKR 4.5 lacs</h3>
+                          <h3 className="PriceCard"> PKR {searchedCarData.price}</h3>
                           <hr className="hr-class"/>
                           <Button className="ProductContactButton" color="success" > <FontAwesomeIcon className="mr-1" icon={faPhone} /> +923214569349 </Button>
                         </Card>
@@ -173,7 +179,7 @@ const SearchPage=()=> {
                           <hr className="hr-class"/>
                           <CardText className="SellerInformation mt-3">
                                 <FontAwesomeIcon icon={faUser} size="2x" />
-                                <h4>Muhammza Hamza Tufail</h4>
+                                 <h4>{searchedCarData.user ? searchedCarData.user.username : null}</h4>
                                 <p>Member since 19 sep 2019</p>
                           </CardText>
                         </Card>
@@ -196,4 +202,4 @@ const SearchPage=()=> {
     )
 }
 
-export default SearchPage;
+export default withRouter (ProductDescripton);
