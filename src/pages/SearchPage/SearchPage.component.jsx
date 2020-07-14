@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { withRouter } from 'react-router-dom'
 import { useHistory } from 'react-router'
 import '../SearchPage/SearchPage.style.css';
-import {Button,Input, Card, CardTitle,CardImg, CardText, Row, Col, UncontrolledTooltip } from 'reactstrap';
+import {Button,Input, Card, CardTitle,CardImg, CardText, Row, Col } from 'reactstrap';
 import Select, { components } from 'react-select';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLocationArrow, faPhone } from '@fortawesome/free-solid-svg-icons';
@@ -13,48 +13,90 @@ import { Spinner } from 'reactstrap';
 const SearchPage=()=> {
   // Default Constants
     const MinPrice = [
-        { value: '100000', label: '200000' },
-        { value: '200000', label: '300000' },
-        { value: '300000', label: '400000' }
+        { value: '300000', label: '300000' },
+        { value: '400000', label: '400000' },
+        { value: '500000', label: '500000' },
+        { value: '600000', label: '600000' },
+        { value: '700000', label: '700000' },
+        { value: '800000', label: '800000' },
+        { value: '600000', label: '600000' }
+
       ];
       const MaxPrice = [
-        { value: '100000', label: '200000' },
-        { value: '200000', label: '300000' },
-        { value: '300000', label: '400000' }
+        { value: '300000', label: '300000' },
+        { value: '400000', label: '400000' },
+        { value: '500000', label: '500000' },
+        { value: '600000', label: '600000' },
+        { value: '700000', label: '700000' },
+        { value: '800000', label: '800000' },
+        { value: '600000', label: '600000' }
       ]
       const CityOptions = [
         { value: 'Lahore', label: 'Lahore' },
         { value: 'Islamabad', label: 'Islamabad' },
         { value: 'Karachi', label: 'Karachi' }
       ]
-      const CarOptions = [
-        { value: 'Audi', label: 'Audi' },
-        { value: 'Suzuki', label: 'Suzuki' },
-        { value: 'Cultus', label: 'Cultus' }
+      const RegistrationOption = [
+        { value: 'Lahore', label: 'Lahore' },
+        { value: 'Islamabad', label: 'Islamabad' },
+        { value: 'Karachi', label: 'Karachi' }
       ]
+      // const CarOptions = [
+      //   { value: 'Audi', label: 'Audi' },
+      //   { value: 'Suzuki', label: 'Suzuki' },
+      //   { value: 'Cultus', label: 'Cultus' },
+      //   {value: 'N-one', label: 'N-one'},
+      //   {value: 'N-one', label: 'N-one'},
+      //   {value: 'Mercedes', label: 'Mercedes'}
+      // ]
+      // const CarModel = [
+      //   { value: '2001', label: '2001' },
+      //   { value: '2002', label: '2002' },
+      //   { value: '2003', label: '2003' },
+      //   { value: '2004', label: '2004' },
+      //   { value: '2005', label: '2005' },
+      //   { value: '2006', label: '2006' },
+      //   { value: '2010', label: '2010' },
+      //   { value: '2011', label: '2011' },
+      //   { value: '2012', label: '2012' },
+      //   { value: '2013', label: '2013' },
+      //   { value: '2013', label: '2013' },
+      //   { value: '2014', label: '2014' },
+      //   { value: '2015', label: '2015' },
+      //   { value: '2016', label: '2016' },
+      //   { value: '2017', label: '2017' },
+      //   { value: '2018', label: '2018' },
+      //   { value: '2019', label: '2019' },
+      //   { value: '2020', label: '2020' },
+      // ]
       // Default Constants
 
       // states
       const history = useHistory()
       const [searchCarData, setsearchCarData] = React.useState([])
       const [loader, setLoader] = React.useState("true")
+      const [minPrice, setMinPrice] = React.useState("")
+      const [maxPrice, setMaxPrice] = React.useState("")
+      const [filterCity, setFilterCity] = React.useState("")
+      const [filterRegistrationCity, setFilterRegistrationCity] = React.useState("")
+      const [filterName, setFilterName] = React.useState("")
       // states
 
       // constants
-      const TooltipContent = ({ scheduleUpdate }) => {
-        React.useEffect(() => {
-          const intervalId = setInterval(() => {
-            scheduleUpdate();
-          }, 2000);
-          return () => clearInterval(intervalId);
-        });
-        return (
-          <div>
-            <h6>Saqib</h6>
-            <h6><FontAwesomeIcon icon={faPhone}/> <strong className="ml-1">033214569349</strong></h6>
-          </div>
-        );
-      }
+      // const TooltipContent = ({ scheduleUpdate }) => {
+      //   React.useEffect(() => {
+      //     const intervalId = setInterval(() => {
+      //       scheduleUpdate();
+      //     }, 2000);
+      //     return () => clearInterval(intervalId);
+      //   });
+      //   return (
+      //     <div>
+      //       <h6>Saqib</h6>
+      //       <h6><FontAwesomeIcon icon={faPhone}/> <strong className="ml-1">033214569349</strong></h6>
+      //     </div>
+      //   );
+      // }
       // constants
 
       // Functions
@@ -63,10 +105,43 @@ const SearchPage=()=> {
             pathname: `${process.env.PUBLIC_URL}/product/description`,
             state: { vehicleID: vehicleID }
           });
-          // window.location.reload();
-        // window.location.pathname= `${process.env.PUBLIC_URL}/product/description`
       }
+      const  handleMinPriceChange = (selectedOption) => {
+        setMinPrice(selectedOption.value)
+      };
+      const  handleMaxPriceChange = (selectedOption) => {
+        setMaxPrice(selectedOption.value)
+      };
+      const  handleCityChange = (selectedOption) => {
+        setFilterCity(selectedOption.value);
+      };
+      const  handleRegistrationCityChange = (selectedOption) => {
+        setFilterRegistrationCity(selectedOption.value);
+      };
+      const handleNameChange = (event) =>{
+        setFilterName(event.target.value);
+      }
+      const handleFilterSubmit = (e) =>{
+        e.preventDefault()
+        if(filterName.length > 0 && filterCity.length <= 0  && filterRegistrationCity.length <= 0 && minPrice.length <= 0) {
+          Axios.get(`/vehicles/${filterName}`)
+         .then(res => {
+              setLoader("true")
+              setsearchCarData (res.data)
+              setLoader("false")
 
+        })
+        }
+      //   Axios.get(`/ads/search/${filterName}/${filterCity}/${filterRegistrationCity}/${minPrice}`)
+      //   .then(res => {
+      //        setLoader("true")
+      //        setsearchCarData (res.data)
+      //        setLoader("false")
+      //  })
+      }
+      const handleClearFilters = async ()  => {
+        window.location.reload()
+      }
       React.useEffect(
         ()=>{
           Axios.get("/vehicles")
@@ -85,38 +160,59 @@ const SearchPage=()=> {
        <div className="custom-container margin-class">
            <div className="row">
               <div className="col-md-3 mt-2 ">
-                <div className="border p-2 bg-main text-white ">
-                 <h6>Filters</h6>
-                </div>
-                <div className=" border px-2 p-2 ">
-                  <h6>Min Price:</h6>
-                  <Select options={MinPrice} className='w-100'/>
-                </div>
-                <div className=" border px-2 p-2 ">
-                  <h6>Max Price:</h6>
-                  <Select options={MinPrice} className='w-100'/>
-                </div>
-                <div className=" border px-2 p-2 ">
-                  <h6 >City:</h6>
-                  <Select options={CityOptions} className='w-100' />
-                </div>
-                <div className=" border px-2 p-2 ">
-                  <h6 >Car Model:</h6>
-                  <Select options={CityOptions} className='w-100' />
-                </div>
+                <form onSubmit={handleFilterSubmit}>
+                  <div className="border p-2 bg-main text-white">
+                  <h6>Filters</h6>
+                  </div>
+                  <div className=" border px-2 p-2 ">
+                    <h6>Search By Name</h6>
+                    <Input type="text" name="name" id="name" placeholder="search by name" value= {filterName} onChange={handleNameChange}/>
+                  </div>
+                  <div className=" border px-2 p-2 ">
+                    <h6>Min Price:</h6>
+                    <Select options={MinPrice}  className='w-100' onChange={handleMinPriceChange}/>
+                  </div>
+                  <div className=" border px-2 p-2 ">
+                    <h6>Max Price:</h6>
+                    <Select options={MaxPrice} className='w-100' onChange={handleMaxPriceChange}/>
+                  </div>
+                  <div className=" border px-2 p-2 ">
+                    <h6 >City:</h6>
+                    <Select options={CityOptions} className='w-100' onChange={handleCityChange}/>
+                  </div>
+                  <div className=" border px-2 p-2 ">
+                    <h6 >Registraion City:</h6>
+                    <Select options={RegistrationOption} className='w-100' onChange={handleRegistrationCityChange} />
+                  </div>
+                  {/* <div className=" border px-2 p-2 ">
+                    <h6 >Car Model:</h6>
+                    <Select options={CityOptions} className='w-100' />
+                  </div>
 
-                <div className=" border px-2 p-2 ">
-                  <h6 >Mileage:</h6>
-                  <Select options={CityOptions} className='w-100' />
-                </div>
-                <div className=" border px-2 p-2 ">
-                  <h6 >Transmission:</h6>
-                  <Select options={CityOptions} className='w-100' />
-                </div>
+                  <div className=" border px-2 p-2 ">
+                    <h6 >Mileage:</h6>
+                    <Select options={CityOptions} className='w-100' />
+                  </div>
+                  <div className=" border px-2 p-2 ">
+                    <h6 >Transmission:</h6>
+                    <Select options={CityOptions} className='w-100' />
+                  </div> */}
+                  <div className=" border px-2 p-2  d-flex ">
+                    <Button  type="submit" className="mx-auto d-block" color="primary">
+                      Apply Filters
+                    </Button>
+                    <Button  disabled={filterName.length <= 0 && filterCity.length <= 0  && filterRegistrationCity.length <= 0 && minPrice.length <= 0 ? true : false }
+                    onClick={handleClearFilters}
+                    className="mx-auto d-block"
+                    color="danger">
+                      Clear Filters
+                    </Button>
+                  </div>
+                </form>
               </div>
               <div className="col-md-9 mt-2">
                 <Row>
-                  {searchCarData && loader === "false" ? searchCarData.map((cars,index)=>(
+                  {searchCarData.length >= 1 && loader === "false" ? searchCarData.map((cars,index)=>(
                     <Col index = {index} sm="12" className="mt-2">
                     <Card style={{zIndex:"1"}}className="ProdutCard" onClick={()=>redirectToDescription(cars._id)}>
                       <Row className="p-2">
@@ -167,7 +263,15 @@ const SearchPage=()=> {
                     </Card>
                   </Col>
 
-                  )) : <Spinner  color="primary" style={{margin: "20% auto", width: '7rem', height: '7rem' }} />}
+                  ))
+                  :
+                  searchCarData.length <= 0 && loader === "false"
+                  ?
+                  <div style={{margin: "20% auto", fontSize:"24px", fontWeight:"700", color:"#7a7a7a" }}>
+                    No Record Found!
+                  </div>
+                  :
+                  <Spinner  color="primary" style={{margin: "20% auto", width: '7rem', height: '7rem' }} />}
                 </Row>
               </div>
             </div>
