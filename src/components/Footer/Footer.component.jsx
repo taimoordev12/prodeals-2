@@ -2,8 +2,17 @@ import React from 'react';
 import { Container, Row, Col } from 'reactstrap';
 import '../Footer/Footer.style.css';
 import logo from '../../logo.png';
-const Footer= () => {
+import { useHistory } from 'react-router'
 
+const Footer= () => {
+    const history = useHistory()
+
+    const handleFooterSearch = (type) => {
+        history.push({
+            pathname: `${process.env.PUBLIC_URL}/search`,
+            state: { type: type }
+        });
+    }
 return (
     <Container className='mt-5 footer-cont' >
         <Row>
@@ -14,32 +23,51 @@ return (
 
             <Col md={3} className='mt-5'>
             <h5>Cars</h5>
-                <p>Find New Car <br/> Find Used Car <br/> Car Price Calculator</p>
+            <ul style={{padding: "0",listStyleType: "none"}}>
+                <li style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("car")}>Find New Car</li>
+                <li style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("car")}>Find Used Car </li>
+            </ul >
             </Col>
 
             <Col md={3} className='mt-5'>
             <h5>Bikes</h5>
-                <p>Find New Bike <br/> Find Used Bike <br/> Bike Price Calculator</p>
+            <ul style={{padding: "0",listStyleType: "none"}}>
+                <li style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("bike")}>Find New Bike</li>
+                <li style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("bike")}>Find Used Bike</li>
+            </ul >
             </Col>
 
             <Col md={3} className='mt-5'>
+                
             <h5>Bicycle</h5>
-                <p>Find New Bicycle <br/> Find Used Bicycle <br/> Bicycle Price Calculator</p>
+            <ul style={{padding: "0",listStyleType: "none"}}>
+                <li style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("bicycle")}>Find New Bicycle</li>
+                <li style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("bicycle")}>Find Used Bicycle </li>
+            </ul >
             </Col>
         </Row>
         <Row>
         <Col md={3}></Col>
         <Col md={3}>
             <h5>Tractor</h5>
-                <p>Find New Tractor <br/> Find Used Tractor <br/> Tractor Price Calculator</p>
+            <ul style={{padding: "0",listStyleType: "none"}}>
+                <li style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("tractor")}>Find New Tractor</li>
+                <li style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("tractor")}>Find Used Tractor </li>
+            </ul >
         </Col>
         <Col md={3}>
         <h5>HTV</h5>
-                <p>Find New HTV <br/> Find Used HTV <br/> HTV Price Calculator</p>
+        <ul style={{padding: "0",listStyleType: "none"}}>
+            <li style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("htv")}>Find New HTV</li>
+            <li style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("htv")}>Find Used HTV </li>
+        </ul >
         </Col>
         <Col md={3}>
         <h5>Rickshaws</h5>
-        <p>Find New Rickshaws <br/> Find Used Rickshaws <br/> Rickshaws Price Calculator</p>
+        <ul style={{padding: "0",listStyleType: "none"}}>
+            <li style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("rickshaws")}>Find New Rickshaws</li>
+            <li style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("rickshaws")}>Find Used Rickshaws </li>
+        </ul >
         </Col>
         </Row>
         <Row>

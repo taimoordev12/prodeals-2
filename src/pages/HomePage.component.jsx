@@ -10,9 +10,9 @@ const HomePage =()=> {
         <div>
           <HomeBanner/>
           <ServiceSection/>
+          <FeatureSection/>
           <CarsSection/>
           <SearchTab/>
-          <FeatureSection/>
         </div>
     )
 }

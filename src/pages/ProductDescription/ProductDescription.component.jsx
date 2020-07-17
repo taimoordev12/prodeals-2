@@ -74,6 +74,7 @@ const ProductDescripton=(props)=> {
       // });
       React.useEffect(
         ()=>{
+          window.scrollTo(0, 0)
           Axios.get(`/specific/ad/${props.location.state.vehicleID}`)
          .then(res => {
             setsearchedCarData (res.data[0])
@@ -91,29 +92,25 @@ const ProductDescripton=(props)=> {
                     <Card className="DescriptionCard">
                         <div className="container">
                             <CardText className="DescriptionProductTitle">{searchedCarData.title}</CardText>
+                            {searchedCarData.isFeatured ?
+                              <CardText>
+                              <Button className=" ProductContact" color="success" >
+                                Featured
+                              </Button>
+                              </CardText> 
+                              : null }
                             <CardText className="ProductLocation">
                                 <FontAwesomeIcon icon={faLocationArrow} />
-                                <strong className="ml-1"> {searchedCarData.location} </strong></CardText>
-                                {/* <Carousel
-                                activeIndex={activeIndex}
-                                next={next}
-                                previous={previous}
-                                >
-                                    <CarouselIndicators items={items} activeIndex={activeIndex} onClickHandler={goToIndex} />
-                                    {slides}
-                                    <CarouselControl direction="prev" directionText="Previous" onClickHandler={previous} />
-                                    <CarouselControl direction="next" directionText="Next" onClickHandler={next} />
-                                </Carousel> */}
-                                      <Carousel>
-                                        {searchedCarData && searchedCarData.images ? searchedCarData.images.map((image,index)=>(
-                                          <div>
-                                            <img className="" src={`http://localhost:4000/Routes/uploads/${image.filename}`} />
-                                          </div>
-                                        )) : null}
-                                    </Carousel>
-
-
-                                <Row className="mt-3">
+                                <strong className="ml-1"> {searchedCarData.location} </strong>
+                            </CardText>
+                            <Carousel>
+                              {searchedCarData && searchedCarData.images ? searchedCarData.images.map((image,index)=>(
+                                <div>
+                                  <img className="" src={`http://localhost:4000/Routes/uploads/${image.filename}`} />
+                                </div>
+                              )) : null}
+                              </Carousel>
+                              <Row className="mt-3">
                                 <Col md="3" sm="6" style={{border:"0.5px solid Gray", backgroundColor:"#e0e0e0", paddingTop:"20px", paddingBottom:"20px" }}>
                                     <div style={{textAlign:"center",marginTop:"15px"}}>
                                         <FontAwesomeIcon icon={faCalendar} size="2x" />

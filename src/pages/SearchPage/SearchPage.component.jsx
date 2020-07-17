@@ -76,6 +76,7 @@ const SearchPage=(props)=> {
       // states
       const history = useHistory()
       const [formObject, setFormObject] = React.useState(props &&props.location && props.location.state && props.location.state.searchedData ? props.location.state.searchedData: "")
+      const [categoryFromFooter, setCategoryFromFooter] = React.useState(props &&props.location && props.location.state && props.location.state.type ? props.location.state.type: "")
       const [searchCarData, setsearchCarData] = React.useState([])
       const [loader, setLoader] = React.useState("true")
       // filters state values
@@ -170,11 +171,25 @@ const SearchPage=(props)=> {
       }
       const filterhandler = () =>{
         setFormObject("")
+        setCategoryFromFooter("")
       }
       // component mount states handlers
       React.useEffect(
         ()=>{
-          if(formObject.isFromMainPage === "true") {
+          console.log(categoryFromFooter)
+        if(categoryFromFooter) {
+          console.log("in category")
+
+            Axios.get(`/show/${categoryFromFooter}`)
+            .then(res => {
+              setLoader("true")
+              setsearchCarData (res.data)
+              setLoader("false")
+            })
+        }
+        else if(formObject.isFromMainPage === "true") {
+          console.log("in form main page")
+
             Axios.post( "/search/filters", {formObject})
             .then(res => {
               setLoader("true")
@@ -185,7 +200,9 @@ const SearchPage=(props)=> {
               console.log(err)
             })
           }
-          else{
+        else{
+          console.log("in normal page")
+
             Axios.get("/vehicles")
             .then(res => {
                 setLoader("true")
@@ -196,7 +213,7 @@ const SearchPage=(props)=> {
               console.log(err)
             })
           }
-          if(filterCategory.length > 0){
+        if(filterCategory.length > 0){
             Axios.get(`/search/companies/${filterCategory}`)
             .then(res=>{
               setCompaniesDBData (res.data)
@@ -204,36 +221,35 @@ const SearchPage=(props)=> {
             .catch(err=>{
               console.log(err)
             })
-          }
-          if(filterCategory.length > 0 && filterCompany.length > 0){
-            Axios.get(`/search/models/${filterCategory}/${filterCompany}`)
-            .then(res=>{
-              console.log(res)
-              setModelsDBData (res.data)
-            })
-            .catch(err=>{
-              console.log(err)
-            })
-          }
-
-          Axios.get("/locations")
+        }
+        if(filterCategory.length > 0 && filterCompany.length > 0){
+          Axios.get(`/search/models/${filterCategory}/${filterCompany}`)
           .then(res=>{
             console.log(res)
-            setLocationFilterData (res.data)
+            setModelsDBData (res.data)
           })
           .catch(err=>{
-              console.log(err)
+            console.log(err)
+          })
+        }
+        Axios.get("/locations")
+        .then(res=>{
+          console.log(res)
+          setLocationFilterData (res.data)
+        })
+        .catch(err=>{
+            console.log(err)
 
-          })
-          Axios.get("/registerations")
-          .then(res=>{
-            setRegistrationFilterData (res.data)
-          })
-          .catch(err=>{
-              console.log(err)
-          })
+        })
+        Axios.get("/registerations")
+        .then(res=>{
+          setRegistrationFilterData (res.data)
+        })
+        .catch(err=>{
+            console.log(err)
+        })
 
-       },[filterCategory, filterCompany])
+       },[filterCategory, filterCompany, categoryFromFooter])
        // Functions
     return (
        <div className="custom-container margin-class">
@@ -374,6 +390,13 @@ const SearchPage=(props)=> {
                                 <FontAwesomeIcon icon={faPhone} /><strong className="ProductContact ml-2">03214569349</strong>
                               </Button>
                               </div>
+                              {cars.isFeatured ?
+                              <CardText>
+                              <Button className=" ProductContact" color="success" >
+                                Featured
+                              </Button>
+                              </CardText> 
+                              : null }
                           </div>
                         </Col>
                       </Row>
