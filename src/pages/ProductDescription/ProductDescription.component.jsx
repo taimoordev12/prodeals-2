@@ -90,7 +90,7 @@ const ProductDescripton=(props)=> {
                   <Col md="8" className="mt-3">
                     <Card className="DescriptionCard">
                         <div className="container">
-                            <CardText className="DescriptionProductTitle">{searchedCarData.name}</CardText>
+                            <CardText className="DescriptionProductTitle">{searchedCarData.title}</CardText>
                             <CardText className="ProductLocation">
                                 <FontAwesomeIcon icon={faLocationArrow} />
                                 <strong className="ml-1"> {searchedCarData.location} </strong></CardText>
@@ -117,7 +117,7 @@ const ProductDescripton=(props)=> {
                                 <Col md="3" sm="6" style={{border:"0.5px solid Gray", backgroundColor:"#e0e0e0", paddingTop:"20px", paddingBottom:"20px" }}>
                                     <div style={{textAlign:"center",marginTop:"15px"}}>
                                         <FontAwesomeIcon icon={faCalendar} size="2x" />
-                                        <h4>{searchedCarData.model}</h4>
+                                        <h4>{searchedCarData.modelYear}</h4>
                                     </div>
                                 </Col>
                                 <Col md="3" sm="6" style={{border:"0.5px solid Gray" , backgroundColor:"#e0e0e0", paddingTop:"20px", paddingBottom:"20px" }}>
@@ -186,7 +186,7 @@ const ProductDescripton=(props)=> {
                         <Card body className="CardStyles text-center">
                           <h3 className="PriceCard"> PKR {searchedCarData.price}</h3>
                           <hr className="hr-class"/>
-                          <Button className="ProductContactButton" color="success" > <FontAwesomeIcon className="mr-1" icon={faPhone} /> +923214569349 </Button>
+                          <Button className="ProductContactButton" color="success" > <FontAwesomeIcon className="mr-1" icon={faPhone} /> {searchedCarData.contact} </Button>
                         </Card>
                       </Col>
                       <Col xs="12" className="mt-3">

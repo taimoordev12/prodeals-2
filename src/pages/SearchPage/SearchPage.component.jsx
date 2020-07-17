@@ -2,15 +2,14 @@ import React, { useState } from 'react';
 import { withRouter } from 'react-router-dom'
 import { useHistory } from 'react-router'
 import '../SearchPage/SearchPage.style.css';
-import {Button,Input, Card, CardTitle,CardImg, CardText, Row, Col } from 'reactstrap';
-import Select, { components } from 'react-select';
+import {Button,Input, Card, CardImg, CardText, Row, Col} from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLocationArrow, faPhone } from '@fortawesome/free-solid-svg-icons';
 // import history from '../../history';
 import Axios from '../../axios';
 import { Spinner } from 'reactstrap';
 
-const SearchPage=()=> {
+const SearchPage=(props)=> {
  
       // Default Constants
       const MinPrice = [
@@ -69,13 +68,14 @@ const SearchPage=()=> {
       ]
       const Categories = [
         { value: 'car', label: 'car' },
-        { value: 'Bike', label: 'Bike' },
+        { value: 'bike', label: 'bike' },
         { value: 'rickshaw', label: 'rickshaw' },
         { value: 'bicycle', label: 'bicycle' },
         { value: 'tractor', label: 'tractor' }
       ]
       // states
       const history = useHistory()
+      const [formObject, setFormObject] = React.useState(props &&props.location && props.location.state && props.location.state.searchedData ? props.location.state.searchedData: "")
       const [searchCarData, setsearchCarData] = React.useState([])
       const [loader, setLoader] = React.useState("true")
       // filters state values
@@ -140,6 +140,7 @@ const SearchPage=()=> {
         }
         else {
           const formObject = {
+            isFromMainPage: "false",
             category: filterCategory,
             company: filterCompany,
             companyModel: filterCompanyModel,
@@ -167,61 +168,77 @@ const SearchPage=()=> {
       const handleClearFilters = async ()  => {
         window.location.reload()
       }
-
+      const filterhandler = () =>{
+        setFormObject("")
+      }
       // component mount states handlers
       React.useEffect(
         ()=>{
-          Axios.get("/vehicles")
-         .then(res => {
+          if(formObject.isFromMainPage === "true") {
+            Axios.post( "/search/filters", {formObject})
+            .then(res => {
               setLoader("true")
               setsearchCarData (res.data)
               setLoader("false")
-            if(filterCategory.length > 0){
-              Axios.get(`/search/companies/${filterCategory}`)
-              .then(res=>{
-                setCompaniesDBData (res.data)
-              })
-              .catch(err=>{
-                console.log(err)
-              })
-            }
-            if(filterCategory.length > 0 && filterCompany.length > 0){
-              Axios.get(`/search/models/${filterCategory}/${filterCompany}`)
-              .then(res=>{
-                console.log(res)
-                setModelsDBData (res.data)
-              })
-              .catch(err=>{
-                console.log(err)
-              })
-            }
-
-            Axios.get("/locations")
+            })
+            .catch(err => {
+              console.log(err)
+            })
+          }
+          else{
+            Axios.get("/vehicles")
+            .then(res => {
+                setLoader("true")
+                setsearchCarData (res.data)
+                setLoader("false")
+            })
+            .catch(err => {
+              console.log(err)
+            })
+          }
+          if(filterCategory.length > 0){
+            Axios.get(`/search/companies/${filterCategory}`)
+            .then(res=>{
+              setCompaniesDBData (res.data)
+            })
+            .catch(err=>{
+              console.log(err)
+            })
+          }
+          if(filterCategory.length > 0 && filterCompany.length > 0){
+            Axios.get(`/search/models/${filterCategory}/${filterCompany}`)
             .then(res=>{
               console.log(res)
-              setLocationFilterData (res.data)
+              setModelsDBData (res.data)
             })
             .catch(err=>{
-                console.log(err)
+              console.log(err)
+            })
+          }
 
-            })
-            Axios.get("/registerations")
-            .then(res=>{
-              setRegistrationFilterData (res.data)
-            })
-            .catch(err=>{
-                console.log(err)
-            })
-        })
-        .catch(err => {
-          console.log(err)
-        })
+          Axios.get("/locations")
+          .then(res=>{
+            console.log(res)
+            setLocationFilterData (res.data)
+          })
+          .catch(err=>{
+              console.log(err)
+
+          })
+          Axios.get("/registerations")
+          .then(res=>{
+            setRegistrationFilterData (res.data)
+          })
+          .catch(err=>{
+              console.log(err)
+          })
+
        },[filterCategory, filterCompany])
        // Functions
     return (
        <div className="custom-container margin-class">
            <div className="row">
-              <div className="col-md-3 mt-2 ">
+              <div className="col-md-3 mt-2 " onClick={filterhandler}>
                 <form onSubmit={handleFilterSubmit}>
                   <div className="border p-2 bg-main text-white">
                   <h6>Filters</h6>
@@ -229,7 +246,7 @@ const SearchPage=()=> {
 
                   <div className=" border px-2 p-2 ">
                     <h6>Category:</h6>
-                    <select class="browser-default custom-select custom-select-md mb-2" onChange={handleCategoryChange}>
+                    <select class="browser-default custom-select custom-select-md mb-2" onClick={filterhandler} onChange={handleCategoryChange}>
                       <option value="">Select Category</option>
                       {Categories.map((category,index)=>(
                       <option key={index} value={category.value}>{category.label}</option>
@@ -337,7 +354,7 @@ const SearchPage=()=> {
                                     <strong style={{marginLeft:"10px"}}>PKR {cars.price}</strong>
                                 </CardText>
                               </div>
-                              <CardText className="ProductTitle">{cars.name}</CardText>
+                              <CardText className="ProductTitle">{cars.title}</CardText>
                           </div>
                           <CardText className="ProductLocation mt-2" style={{color:"#7a7a7a"}}>
                               <FontAwesomeIcon icon={faLocationArrow} />
@@ -345,7 +362,7 @@ const SearchPage=()=> {
                           </CardText>
                             <div>
                               <p className="ForLastSpan">
-                                <span className="ProductShortDetails">{cars.model}</span>
+                                <span className="ProductShortDetails">{cars.modelYear}</span>
                                 <span className="ProductShortDetails">{cars.mileage} KM</span>
                                 <span className="ProductShortDetails">{cars.engine} cc</span>
                                 <span>{cars.transmission}</span>
@@ -357,7 +374,6 @@ const SearchPage=()=> {
                                 <FontAwesomeIcon icon={faPhone} /><strong className="ProductContact ml-2">03214569349</strong>
                               </Button>
                               </div>
-                              <CardText className="ProductUpdateInfo">updated 2 days ago.</CardText>
                           </div>
                         </Col>
                       </Row>
