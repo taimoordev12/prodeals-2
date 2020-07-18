@@ -4,10 +4,13 @@ import '../Footer/Footer.style.css';
 import logo from '../../logo.png';
 import { useHistory } from 'react-router'
 
-const Footer= () => {
+const Footer= (props) => {
     const history = useHistory()
 
     const handleFooterSearch = (type) => {
+        if (window.location.href.includes("/prodeals/search")) {
+            window.location.reload()
+        }
         history.push({
             pathname: `${process.env.PUBLIC_URL}/search`,
             state: { type: type }
