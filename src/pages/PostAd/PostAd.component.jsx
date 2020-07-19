@@ -29,6 +29,7 @@ import { useEffect } from 'react';
       const [modelyear, setModelYear] = React.useState('')
       const [adPhotos, setAdPhotos] = React.useState([])
       const [formsInputs, setFormsInputs] = React.useState({})
+    //   const [finalImages, setFinalImages] = React.useState([])
 
       const handleInputChange = (evt) => {
         const value = evt.target.value;
@@ -37,15 +38,22 @@ import { useEffect } from 'react';
           [evt.target.name]: value
         });
       }
-    const onDropImage = (picture) => {
-            setAdPhotos([picture]);
+    const onDropImage = (event) => {
+        let files = event.target.files;
+        // const formData = new FormData();
+        // files.map((files,index)=>{
+        //     formData.append(`images[${index}]`, files[index])
+        // })
+       console.log(event.target.files)
+        setAdPhotos({
+        ...adPhotos,
+        [event.target.name]:event.target.files
+        })
     }
     const handleSubmit = (e) => {
         e.preventDefault()
+        console.log(adPhotos.images)
         let data=new FormData();
-        console.log(formsInputs.vehicleType)
-        console.log(formsInputs.modelName)
-        console.log(formsInputs.companyName)
         data.append('category',formsInputs.vehicleType);
         data.append('modelName',formsInputs.modelName);
         data.append('company',formsInputs.companyName);
@@ -60,15 +68,23 @@ import { useEffect } from 'react';
         data.append('location',formsInputs.location);
         data.append('title',formsInputs.title);
         data.append('registeration',formsInputs.registeredCity);
+        data.append('images',[adPhotos])
         // console.log(data)
-        Axios.post("/create-ad",{data}).then(res=>{
+        Axios.post("/create-ad",data,{
+            headers: {
+                'Content-Type': 'multiartp/form-data'
+            }
+        }
+        ).then(res=>{
             console.log("done")
         })
-    }
-      console.log(adPhotos)
-      console.log(adPhotos.length)
+        // console.log(finalImages)
 
-      console.log(modelyear)
+    }
+    //   console.log(adPhotos)
+    //   console.log(adPhotos.length)
+
+      console.log(adPhotos.images)
 
     return (
        <div className="container-fluid  ">
@@ -106,10 +122,10 @@ import { useEffect } from 'react';
                         </select>
 
                         <p className='mt-3'>Company Name<span style={{color:'red'}}>*</span></p>
-                        <input onChange={handleInputChange} name="companyName" required={true} className='w-100 py-2'/>
+                        <input onChange={handleInputChange} name="companyName"  className='w-100 py-2'/>
 
                         <p className='mt-3'>Model Name<span style={{color:'red'}}>*</span></p>
-                        <input onChange={handleInputChange} name="modelName" required={true} className='w-100 py-2'/>
+                        <input onChange={handleInputChange} name="modelName"  className='w-100 py-2'/>
 
                         <p className='mt-3'>Location<span style={{color:'red'}}>*</span></p>
                         <select onChange={handleInputChange} name="location" class="browser-default custom-select custom-select-lg mb-2">
@@ -119,16 +135,16 @@ import { useEffect } from 'react';
                         </select>
 
                         <p className='mt-3'>Registered City<span style={{color:'red'}}>*</span></p>
-                        <input onChange={handleInputChange} name="registeredCity" required={true} type='text' className='w-100 py-2' />
+                        <input onChange={handleInputChange} name="registeredCity"  type='text' className='w-100 py-2' />
 
                         <p className='mt-3'>Title<span style={{color:'red'}}>*</span></p>
-                        <input onChange={handleInputChange} name="title" required={true} className='w-100 py-2'/>
+                        <input onChange={handleInputChange} name="title"  className='w-100 py-2'/>
 
                         <p className='mt-3'>Model Year <span style={{color:'red'}}>*</span></p>
                         <Datetime dateFormat="YYYY" onChange={(date) => setModelYear(date.year())}/>
 
                         <p className='mt-3'>Color<span style={{color:'red'}}>*</span></p>
-                        <input onChange={handleInputChange} name="color" required={true} type='text' className='w-100 py-2' />
+                        <input onChange={handleInputChange} name="color"  type='text' className='w-100 py-2' />
                         
                         <p className='mt-3'>Transmission<span style={{color:'red'}}>*</span></p>
                         <select onChange={handleInputChange} name="transmission" class="browser-default custom-select custom-select-lg mb-2">
@@ -139,29 +155,32 @@ import { useEffect } from 'react';
                         <p className='mt-3'>Mileage<span style={{color:'red'}}>*</span></p>
                         <InputGroup>
                             <InputGroupAddon addonType="prepend">KM</InputGroupAddon>
-                            <input onChange={handleInputChange} name="mileage" required={true} type='number' className='w-100 py-2' />
+                            <input onChange={handleInputChange} name="mileage"  type='number' className='w-100 py-2' />
                         </InputGroup>
                         
                         <p className='mt-3'>Engine Capacity<span style={{color:'red'}}>*</span></p>
                         <InputGroup>
                             <InputGroupAddon addonType="prepend">cc</InputGroupAddon>
-                            <input onChange={handleInputChange} name="enginecapacity" required={true} type='number' className='w-100 py-2' />
+                            <input onChange={handleInputChange} name="enginecapacity"  type='number' className='w-100 py-2' />
                         </InputGroup>
 
                         <p className='mt-3'>Price <span style={{color:'red'}}>*</span></p>
                         <InputGroup>
                             <InputGroupAddon addonType="prepend">PKR</InputGroupAddon>
-                            <input onChange={handleInputChange} name="price" required={true} type='number' className='w-100 py-2 ' />
+                            <input onChange={handleInputChange} name="price"  type='number' className='w-100 py-2 ' />
                         </InputGroup>
 
                         <p className='mt-3'>Contact Number<span style={{color:'red'}}>*</span></p>
-                        <input onChange={handleInputChange} name="contactNumber" required={true} type='number' className='w-100 py-2' />
+                        <input onChange={handleInputChange} name="contactNumber"  type='number' className='w-100 py-2' />
                         
                         <p className='mt-3'>Describe Features of your Vehicle </p><span style={{color:'red'}}>*</span>
-                        <Input onChange={handleInputChange} required={true} type="textarea" name="description" id="exampleText" />
+                        <Input onChange={handleInputChange}  type="textarea" name="description" id="exampleText" />
                         
                         <p className='mt-3'>Upload Images <span style={{color:'red'}}>*</span></p>
-                        <ImageUploader
+                        <input  type="file" id="iamges" name="images" multiple onChange={onDropImage}/>
+                        {/* <ImageUploader
+                            type="file"
+                            name="images"
                             withIcon={true}
                             withPreview={true}
                             fileSizeError= {true}
@@ -169,9 +188,9 @@ import { useEffect } from 'react';
                             buttonText='Choose images'
                             imgExtension={['.jpg', '.gif', '.png', '.gif']}
                             maxFileSize={5242880}
-                            required={true}
+                            
                             onChange={onDropImage}
-                        />
+                        /> */}
                         <div className="text-center mb-3">
                         <ButtonCustom type="submit">Submit</ButtonCustom>
                         </div>
