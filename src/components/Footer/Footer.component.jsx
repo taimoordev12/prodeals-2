@@ -8,6 +8,7 @@ const Footer= (props) => {
     const history = useHistory()
 
     const handleFooterSearch = (type) => {
+        localStorage.removeItem("clickedFilter")
         if (window.location.href.includes("/prodeals/search")) {
             window.location.reload()
         }

@@ -8,8 +8,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faFacebookF} from '@fortawesome/free-brands-svg-icons';
 import { connect } from 'react-redux';
 import * as actions from '../../Store/Actions/index';
-
-
 import {
   Collapse,
   Navbar,
@@ -20,10 +18,9 @@ import {
   NavLink,
   UncontrolledDropdown,
   DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
   NavbarText,
-  Button, Modal, ModalHeader, ModalBody, ModalFooter
+  Button, Modal, ModalHeader, ModalBody, ModalFooter,
+  Dropdown, DropdownMenu, DropdownItem
 } from 'reactstrap';
 import { useEffect } from 'react';
 
@@ -37,6 +34,7 @@ const Header = (props) => {
   const [loginResponse, setLoginResponse]=useState(false)
   const [token, setToken] = useState("")
   const [userData, setUserData]= useState({})
+  const [menuDropDownOpen ,setMenuDropDownOpen]=useState(false)
 
   const toggle = () => setIsOpen(!isOpen);
   const loginHandler = () => {
@@ -60,6 +58,9 @@ const Header = (props) => {
       ...loginObject,
       [event.target.name]:event.target.value
     })
+  }
+  const dropDownToggler = () => {
+    setMenuDropDownOpen(!menuDropDownOpen)
   }
 
   const handleRegisterInpustChange = (event) => {
@@ -157,7 +158,19 @@ const Header = (props) => {
               }
             </NavItem>
             <NavItem>
-            {token && token.length > 0 ? <NavLink><Button color="success" onClick={loginOutHandler}>{userData && userData.firstName ? userData.firstName : null }</Button></NavLink>
+            {token && token.length > 0 ?
+              <NavItem>
+              <Dropdown isOpen={menuDropDownOpen} toggle={dropDownToggler}>
+                <DropdownToggle caret  color="success">
+                {userData && userData.firstName ? userData.firstName : null }
+                </DropdownToggle>
+                <DropdownMenu right>
+                  <DropdownItem  onClick={loginOutHandler} style={{cursor:"pointer",textAlign:"center"}}><strong>Logout</strong></DropdownItem>
+                  <DropdownItem divider style={{textAlign:"center"}} onClick={loginOutHandler} style={{cursor:"pointer"}}><strong>Logout</strong></DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+              </NavItem>
+              // {/* <Button color="success" onClick={loginOutHandler}>{userData && userData.firstName ? userData.firstName : null }</Button> */}
               :
               <NavLink><Button color="danger" onClick={loginHandler}>Login</Button></NavLink>
               }

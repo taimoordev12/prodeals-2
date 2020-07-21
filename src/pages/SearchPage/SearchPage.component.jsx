@@ -5,6 +5,8 @@ import '../SearchPage/SearchPage.style.css';
 import {Button,Input, Card, CardImg, CardText, Row, Col} from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLocationArrow, faPhone } from '@fortawesome/free-solid-svg-icons';
+import Pagination from "react-js-pagination";
+import paginate from "../../components/paginate"
 // import history from '../../history';
 import Axios from '../../axios';
 import { Spinner } from 'reactstrap';
@@ -93,6 +95,9 @@ const SearchPage=(props)=> {
       const [RegistrationFilterData, setRegistrationFilterData] = React.useState([])
       const [CompaniesDBData, setCompaniesDBData] = React.useState([])
       const [ModelsDBData, setModelsDBData] = React.useState([])
+      const [activePage, setActivePage] = React.useState("1")
+      const [pageSize, setPageSize] = React.useState("5")
+      const [clearFilter, setClearFilter] = React.useState(false)
 
       // states
 
@@ -167,17 +172,23 @@ const SearchPage=(props)=> {
       //  })
       }
       const handleClearFilters = async ()  => {
-        window.location.reload()
+        setClearFilter(true)
+        // window.location.reload()
+     
       }
       const filterhandler = () =>{
         setFormObject("")
         setCategoryFromFooter("")
+        localStorage.setItem("clickedFilter", "true")
+      }
+      const handlePageChange = (pageNumber) => {
+        console.log(`active page is ${pageNumber}`);
+        setActivePage(pageNumber);
       }
       // component mount states handlers
       React.useEffect(
         ()=>{
-          console.log(categoryFromFooter)
-        if(categoryFromFooter) {
+        if(categoryFromFooter && !clearFilter && !localStorage.getItem("clickedFilter")) {
           console.log("in category")
 
             Axios.get(`/show/${categoryFromFooter}`)
@@ -187,7 +198,7 @@ const SearchPage=(props)=> {
               setLoader("false")
             })
         }
-        else if(formObject.isFromMainPage === "true") {
+        else if(formObject.isFromMainPage === "true"  && !clearFilter && !localStorage.getItem("clickedFilter")) {
           console.log("in form main page")
 
             Axios.post( "/search/filters", {formObject})
@@ -249,8 +260,10 @@ const SearchPage=(props)=> {
             console.log(err)
         })
 
-       },[filterCategory, filterCompany, categoryFromFooter])
+       },[clearFilter ,filterCategory, filterCompany, categoryFromFooter])
        // Functions
+       const searchCarDataPagination = paginate(searchCarData, activePage, pageSize)
+
     return (
        <div className="custom-container margin-class">
            <div className="row">
@@ -356,7 +369,7 @@ const SearchPage=(props)=> {
               </div>
               <div className="col-md-9 mt-2">
                 <Row>
-                  {searchCarData.length >= 1 && loader === "false" ? searchCarData.map((cars,index)=>(
+                  {searchCarDataPagination.length >= 1 && loader === "false" ? searchCarDataPagination.map((cars,index)=>(
                     <Col index = {index} sm="12" className="mt-2">
                     <Card style={{zIndex:"1"}}className="ProdutCard" onClick={()=>redirectToDescription(cars._id)}>
                       <Row className="p-2">
@@ -405,7 +418,7 @@ const SearchPage=(props)=> {
 
                   ))
                   :
-                  searchCarData.length <= 0 && loader === "false"
+                  searchCarDataPagination.length <= 0 && loader === "false"
                   ?
                   <div style={{margin: "20% auto", fontSize:"24px", fontWeight:"700", color:"#7a7a7a" }}>
                     No Record Found!
@@ -413,6 +426,28 @@ const SearchPage=(props)=> {
                   :
                   <Spinner  color="primary" style={{margin: "20% auto", width: '7rem', height: '7rem' }} />}
                 </Row>
+                {searchCarData.length >= 1 ?
+                 <div className="PaginationStyles col d-flex justify-content-center mt-3 ">
+                 <Pagination
+                   activePage={activePage}
+                   itemsCountPerPage={pageSize}
+                   totalItemsCount={searchCarData.length}
+                   pageRangeDisplayed={5}
+                   onChange={handlePageChange}
+                   itemClass="page-item"
+                   linkClass="page-link"
+                 />
+                </div>
+                : null
+                }
+               
+                  {/* <Pagination
+                    itemsCount={searchCarData.length}
+                    pageSize={pageSize}
+                    onPageChange={handlePageChange}
+                    currentPage={activePage}
+
+                  /> */}
               </div>
             </div>
        </div>

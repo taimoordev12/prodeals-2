@@ -56,11 +56,12 @@ const HomeBanner=()=> {
     }
     const handleFilterSubmit = (e) =>{
           const formObject = {
-            isFromMainPage: "true",
+            isFromMainPage: filterCompany.length <= 0 && filterCompanyModel.length <= 0 && filterModelYear.length <= 0  ?"false" : "true",
             company: filterCompany,
             companyModel: filterCompanyModel,
             modelYear: filterModelYear
           }
+          localStorage.removeItem("clickedFilter")
             history.push({
                 pathname: `${process.env.PUBLIC_URL}/search`,
                 state: { searchedData: formObject }
@@ -127,7 +128,7 @@ const HomeBanner=()=> {
                     className="mx-auto d-block"
                     color="primary"
                     onClick={handleFilterSubmit}>
-                      Apply Filters
+                      Search Vehicle
                 </Button>
             </Col>
             <Col></Col>
