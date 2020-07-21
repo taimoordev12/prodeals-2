@@ -53,8 +53,7 @@ const CarsSection=()=>{
             })
           },[]
         )
-    console.log(featuredCarData)
-return(
+    return(
     <React.Fragment>
     <Container className="mt-5">
         <Row>

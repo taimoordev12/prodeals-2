@@ -1,17 +1,27 @@
-import { createStore, applyMiddleware, compose } from 'redux';
-import thunk from 'redux-thunk';
-import rootReducer from './Reducers/index';
+import {
+    createStore,
+    combineReducers,
+    compose,
+    applyMiddleware
+  } from 'redux';
+  import thunk from 'redux-thunk';
+  import Login from './Reducers/AuthReducer'
 
-const inititalState = {
-
-};
-
-const store = createStore(
-    rootReducer,
-    inititalState,
-    compose(applyMiddleware(thunk)
-    ,
-        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-        ));
-
-export default store;
+  export const Store = (initialState = {todos: [{id:123, text:'hello', completed: false}] }) => {
+      let reducer = combineReducers({
+        Login: Login
+      });
+  
+      let store = createStore(
+          reducer,
+          initialState,
+          compose(
+              applyMiddleware(
+                  thunk
+              ),
+              window.devToolsExtension ? window.devToolsExtension() : f => f
+          )
+      );
+  
+      return store;
+  };

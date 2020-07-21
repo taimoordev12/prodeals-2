@@ -1,4 +1,4 @@
-export const Reset="Reset";
+// export const Reset="Reset";
 
 // login
 export const LOGIN_START="LOGIN_START";

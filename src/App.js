@@ -1,6 +1,6 @@
 import React from 'react';
 import HomePage from './pages/HomePage.component';
-import {Route,Switch} from 'react-router-dom';
+import {Route,Switch,Redirect} from 'react-router-dom';
 import Header from  '../src/components/Header/header.component';
 import Footer from '../src/components/Footer/Footer.component'
 import InspectionPage from '../src/pages/Inspection/InspectionPage.component';
@@ -21,14 +21,17 @@ const App=()=> {
     <Route path={`${process.env.PUBLIC_URL}/comparison`} component={ComparisonPage}/> 
     <Route path={`${process.env.PUBLIC_URL}/accessories`} component={AccesoryInformationPage}/> 
     <Route path={`${process.env.PUBLIC_URL}/inspectionform`} component={InspectionFormPage}/> 
-    <Route path={`${process.env.PUBLIC_URL}/postad`} component={PostAd}/> 
+    {/* protected routes */}
+    {localStorage.getItem("token") && localStorage.getItem("token").length > 0 ?
+    <Route path={`${process.env.PUBLIC_URL}/postad`} component={PostAd}/>
+    :
+    null
+    }
+    {/* protected routes */}
+
     <Route path={`${process.env.PUBLIC_URL}/search`} component={SearchPage}/> 
-    <Route path={`${process.env.PUBLIC_URL}/product/description`} component={ProductDescriptionPage}/> 
-
-
-
-
-    
+    <Route path={`${process.env.PUBLIC_URL}/product/description`} component={ProductDescriptionPage}/>
+    <Redirect to={`${process.env.PUBLIC_URL}/`} />
     </Switch>
     <Footer/>
     </React.Fragment>
