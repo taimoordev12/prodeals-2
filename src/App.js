@@ -10,6 +10,7 @@ import InspectionFormPage from '../src/pages/InspectionFormPage/InspectionFormPa
 import PostAd from '../src/pages/PostAd/PostAd.component';
 import SearchPage from './pages/SearchPage/SearchPage.component';
 import ProductDescriptionPage from './pages/ProductDescription/ProductDescription.component';
+import Profile from './pages/Profile/profile'
 
 const App=()=> {
   return (
@@ -22,13 +23,19 @@ const App=()=> {
     <Route path={`${process.env.PUBLIC_URL}/accessories`} component={AccesoryInformationPage}/> 
     <Route path={`${process.env.PUBLIC_URL}/inspectionform`} component={InspectionFormPage}/> 
     {/* protected routes */}
+
     {localStorage.getItem("token") && localStorage.getItem("token").length > 0 ?
     <Route path={`${process.env.PUBLIC_URL}/postad`} component={PostAd}/>
     :
     null
     }
-    {/* protected routes */}
+    {localStorage.getItem("token") && localStorage.getItem("token").length > 0 ?
+      <Route path={`${process.env.PUBLIC_URL}/profile`} component={Profile}/>
+    :
+    null
+    }
 
+    {/* protected routes */}
     <Route path={`${process.env.PUBLIC_URL}/search`} component={SearchPage}/> 
     <Route path={`${process.env.PUBLIC_URL}/product/description`} component={ProductDescriptionPage}/>
     <Redirect to={`${process.env.PUBLIC_URL}/`} />

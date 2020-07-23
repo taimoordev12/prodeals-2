@@ -5,7 +5,7 @@ import '../Header/header.style.css';
 import {Link} from 'react-router-dom';
 import Axios from '../../axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {faFacebookF} from '@fortawesome/free-brands-svg-icons';
+import {faGoogle} from '@fortawesome/free-brands-svg-icons';
 import { connect } from 'react-redux';
 import * as actions from '../../Store/Actions/index';
 import {
@@ -103,6 +103,15 @@ const Header = (props) => {
       window.location.reload()
     }
   }
+  const hanldeFBLogin = () => {
+    // Axios.get('/auth/facebook').then(res=>{
+    //   console.log(res)
+
+    // }).catch(err=>{
+    //   console.log(err)
+    // })
+    return
+  }
   useEffect(
     ()=>{
       let userData = localStorage.getItem("user")
@@ -188,9 +197,9 @@ const Header = (props) => {
                <div className="col-md-1"></div>
                <div className="col-md-10 bg-adsection">
                   <div className="pt-2">
-                    <Button color="success" outline size="lg" block>
-                    <FontAwesomeIcon icon={faFacebookF} />
-                    <strong className="ml-1"> Login With Facebook </strong>
+                    <Button onClick={hanldeFBLogin} color="success" outline size="lg" block>
+                    <FontAwesomeIcon icon={faGoogle} />
+                    <strong className="ml-1"> Login With Google </strong>
                     </Button>
                   </div>
                   <hr/>
@@ -226,8 +235,8 @@ const Header = (props) => {
                <div className="col-md-10 bg-adsection">
                   <div className="pt-2">
                     <Button color="success" outline size="lg" block>
-                    <FontAwesomeIcon icon={faFacebookF} />
-                    <strong className="ml-1"> Login With Facebook </strong>
+                    <FontAwesomeIcon icon={faGoogle} />
+                    <strong className="ml-1"> Login With Google </strong>
                     </Button>
                   </div>
                   <hr/>

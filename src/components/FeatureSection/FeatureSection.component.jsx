@@ -39,20 +39,20 @@ const CarsSection=()=>{
           state: { vehicleID: vehicleID }
         });
       }
-        useEffect (
-          ()=>{
-            Axios.get('/ads/featured')
-            .then(res=>{
-              setLoader("true")
-              setfeaturedCarData(res.data)
-              setLoader("false")
-              console.log(res)
-            })
-            .catch(err=>{
-              console.log(err)
-            })
-          },[]
-        )
+      useEffect (
+        ()=>{
+          Axios.get('/ads/featured')
+          .then(res=>{
+            setLoader("true")
+            setfeaturedCarData(res.data)
+            setLoader("false")
+            console.log(res)
+          })
+          .catch(err=>{
+            console.log(err)
+          })
+        },[]
+      )
     return(
     <React.Fragment>
     <Container className="mt-5">
