@@ -77,8 +77,8 @@ const SearchPage=(props)=> {
       ]
       // states
       const history = useHistory()
-      const [formObject, setFormObject] = React.useState(props &&props.location && props.location.state && props.location.state.searchedData ? props.location.state.searchedData: "")
-      const [categoryFromFooter, setCategoryFromFooter] = React.useState(props &&props.location && props.location.state && props.location.state.type ? props.location.state.type: "")
+      const [formObject, setFormObject] = React.useState(localStorage.getItem("filters") ? JSON.parse(localStorage.getItem("filters")) : null)
+      const [categoryFromFooter, setCategoryFromFooter] = React.useState(localStorage.getItem("categoryFooter") ? localStorage.getItem("categoryFooter") : null)
       const [searchCarData, setsearchCarData] = React.useState([])
       const [loader, setLoader] = React.useState("true")
       // filters state values
@@ -120,8 +120,8 @@ const SearchPage=(props)=> {
       const  handleRegistrationCityChange = (selectedOption) => {
         setFilterRegistrationCity(selectedOption.target.value);
       };
-      const  handleCategoryChange = async (event) =>{
-        await setFilterCategory(event.target.value);
+      const  handleCategoryChange = (event) =>{
+        setFilterCategory(event.target.value);
 
       }
       const handleCompanyChange = (event) =>{
@@ -134,52 +134,59 @@ const SearchPage=(props)=> {
         setFilterModelYear(event.target.value);
       }
       const handleFilterSubmit = (e) =>{
+        const categoryFooter = localStorage.getItem("categoryFooter")
+        const naturalFilters = JSON.parse(localStorage.getItem("filters"))
         e.preventDefault()
         if(filterCategory.length > 0 && filterModelYear.length <= 0 && filterCompanyModel.length <= 0 && filterCompany.length <= 0 && filterCity.length <= 0  && filterRegistrationCity.length <= 0 && minPrice.length <= 0 && maxPrice <=0 ) {
+          const formObject = {
+            category: filterCategory
+          }
           Axios.get(`/show/${filterCategory}`)
-         .then(res => {
+          .then(res => {
               setLoader("true")
               setsearchCarData (res.data)
               setLoader("false")
-
-        })
+          })
+          localStorage.setItem("filters", JSON.stringify(formObject))
         }
         else {
           const formObject = {
-            isFromMainPage: "false",
-            category: filterCategory,
-            company: filterCompany,
-            companyModel: filterCompanyModel,
-            modelYear: filterModelYear,
-            minPrice: minPrice,
-            maxPrice: maxPrice,
-            city: filterCity,
-            registrationCity: filterRegistrationCity
+          isFromMainPage: "false",
+          category: filterCategory,
+          company: filterCompany,
+          companyModel: filterCompanyModel,
+          modelYear: filterModelYear,
+          minPrice: minPrice,
+          maxPrice: maxPrice,
+          city: filterCity
           }
+          localStorage.setItem("filters", JSON.stringify(formObject))
           Axios.post("/search/filters", {formObject})
          .then(res => {
               setLoader("true")
               setsearchCarData (res.data)
               setLoader("false")
-
-        })
+          })
         }
-      //   Axios.get(`/ads/search/${filterName}/${filterCity}/${filterRegistrationCity}/${minPrice}`)
-      //   .then(res => {
-      //        setLoader("true")
-      //        setsearchCarData (res.data)
-      //        setLoader("false")
-      //  })
+        if (categoryFooter) {
+          if (naturalFilters) {
+            if (naturalFilters.category){
+              if (categoryFooter !== naturalFilters.category){
+                localStorage.removeItem("categoryFooter")
+                alert("abc")
+              }
+            }
+          }
+        }
       }
       const handleClearFilters = async ()  => {
-        setClearFilter(true)
-        // window.location.reload()
+        // setClearFilter(true)
+        window.location.reload()
+        const formObject = {
+          isFromMainPage: "all"
+        }
+        localStorage.setItem("filters",JSON.stringify(formObject) )
      
-      }
-      const filterhandler = () =>{
-        setFormObject("")
-        setCategoryFromFooter("")
-        localStorage.setItem("clickedFilter", "true")
       }
       const handlePageChange = (pageNumber) => {
         console.log(`active page is ${pageNumber}`);
@@ -188,19 +195,15 @@ const SearchPage=(props)=> {
       // component mount states handlers
       React.useEffect(
         ()=>{
-        if(categoryFromFooter && !clearFilter && !localStorage.getItem("clickedFilter")) {
-          console.log("in category")
-
+          if(categoryFromFooter) {
             Axios.get(`/show/${categoryFromFooter}`)
             .then(res => {
               setLoader("true")
               setsearchCarData (res.data)
               setLoader("false")
             })
-        }
-        else if(formObject.isFromMainPage === "true"  && !clearFilter && !localStorage.getItem("clickedFilter")) {
-          console.log("in form main page")
-
+          }
+          else if(formObject.isFromMainPage === "true" ) {
             Axios.post( "/search/filters", {formObject})
             .then(res => {
               setLoader("true")
@@ -211,20 +214,29 @@ const SearchPage=(props)=> {
               console.log(err)
             })
           }
-        else{
-          console.log("in normal page")
-
-            Axios.get("/vehicles")
+          else if(formObject.isFromMainPage === "false" ) {
+            Axios.post( "/search/filters", {formObject})
             .then(res => {
-                setLoader("true")
-                setsearchCarData (res.data)
-                setLoader("false")
+              setLoader("true")
+              setsearchCarData (res.data)
+              setLoader("false")
             })
             .catch(err => {
               console.log(err)
             })
           }
-        if(filterCategory.length > 0){
+          else{
+            Axios.get("/vehicles")
+            .then(res => {
+              setLoader("true")
+              setsearchCarData (res.data)
+              setLoader("false")
+            })
+            .catch(err => {
+              console.log(err)
+            })
+          }
+          if(filterCategory.length > 0){
             Axios.get(`/search/companies/${filterCategory}`)
             .then(res=>{
               setCompaniesDBData (res.data)
@@ -232,42 +244,41 @@ const SearchPage=(props)=> {
             .catch(err=>{
               console.log(err)
             })
-        }
-        if(filterCategory.length > 0 && filterCompany.length > 0){
-          Axios.get(`/search/models/${filterCategory}/${filterCompany}`)
+          }
+          if(filterCategory.length > 0 && filterCompany.length > 0){
+            Axios.get(`/search/models/${filterCategory}/${filterCompany}`)
+            .then(res=>{
+              console.log(res)
+              setModelsDBData (res.data)
+            })
+            .catch(err=>{
+              console.log(err)
+            })
+          }
+          Axios.get("/locations")
           .then(res=>{
             console.log(res)
-            setModelsDBData (res.data)
+            setLocationFilterData (res.data)
           })
           .catch(err=>{
             console.log(err)
           })
-        }
-        Axios.get("/locations")
-        .then(res=>{
-          console.log(res)
-          setLocationFilterData (res.data)
-        })
-        .catch(err=>{
-            console.log(err)
+          Axios.get("/registerations")
+          .then(res=>{
+            setRegistrationFilterData (res.data)
+          })
+          .catch(err=>{
+              console.log(err)
+          })
 
-        })
-        Axios.get("/registerations")
-        .then(res=>{
-          setRegistrationFilterData (res.data)
-        })
-        .catch(err=>{
-            console.log(err)
-        })
-
-       },[clearFilter ,filterCategory, filterCompany, categoryFromFooter])
+       },[filterCategory, filterCompany, categoryFromFooter])
        // Functions
        const searchCarDataPagination = paginate(searchCarData, activePage, pageSize)
 
     return (
        <div className="custom-container margin-class">
            <div className="row">
-              <div className="col-md-3 mt-2 " onClick={filterhandler}>
+              <div className="col-md-3 mt-2 ">
                 <form onSubmit={handleFilterSubmit}>
                   <div className="border p-2 bg-main text-white">
                   <h6>Filters</h6>
@@ -275,7 +286,7 @@ const SearchPage=(props)=> {
 
                   <div className=" border px-2 p-2 ">
                     <h6>Category:</h6>
-                    <select class="browser-default custom-select custom-select-md mb-2" onClick={filterhandler} onChange={handleCategoryChange}>
+                    <select class="browser-default custom-select custom-select-md mb-2" onChange={handleCategoryChange}>
                       <option value="">Select Category</option>
                       {Categories.map((category,index)=>(
                       <option key={index} value={category.value}>{category.label}</option>
@@ -340,7 +351,7 @@ const SearchPage=(props)=> {
                         ))}
                     </select>
                   </div>
-                  <div className=" border px-2 p-2 ">
+                  {/* <div className=" border px-2 p-2 ">
                     <h6 >Registraion City:</h6>
                     <select class="browser-default custom-select custom-select-md mb-2" onChange={handleRegistrationCityChange}>
                       <option value="">Select Registered City</option>
@@ -348,7 +359,7 @@ const SearchPage=(props)=> {
                       <option key={index} value={locations}>{locations}</option>
                       ))}
                     </select>
-                  </div>
+                  </div> */}
                   <div className=" border px-2 p-2  d-flex ">
                     <Button
                     disabled={filterCity.length <= 0  && filterRegistrationCity.length <= 0 && minPrice.length <= 0 && maxPrice.length <= 0  && filterCategory.length <= 0 && filterCompany.length <= 0 && filterCompanyModel.length <= 0 && filterModelYear.length <= 0  ? true : false }
@@ -358,7 +369,7 @@ const SearchPage=(props)=> {
                       Apply Filters
                     </Button>
                     <Button
-                    disabled={filterCity.length <= 0  && filterRegistrationCity.length <= 0 && minPrice.length <= 0 && maxPrice.length <= 0  && filterCategory.length <= 0 && filterCompany.length <= 0 && filterCompanyModel.length <= 0 && filterModelYear.length <= 0  ? true : false }
+                    // disabled={filterCity.length <= 0  && filterRegistrationCity.length <= 0 && minPrice.length <= 0 && maxPrice.length <= 0  && filterCategory.length <= 0 && filterCompany.length <= 0 && filterCompanyModel.length <= 0 && filterModelYear.length <= 0  ? true : false }
                     onClick={handleClearFilters}
                     className="mx-auto d-block"
                     color="danger">
@@ -374,7 +385,7 @@ const SearchPage=(props)=> {
                     <Card style={{zIndex:"1"}}className="ProdutCard" onClick={()=>redirectToDescription(cars._id)}>
                       <Row className="p-2">
                         <Col md="4">
-                          <CardImg  width="100%" src={`http://localhost:4000/Routes/uploads/${cars.images[0].filename}`} alt="Card image cap" />
+                          <CardImg  width="100%" src={`http://localhost:4000/Routes/uploads/${cars.images[0] ? cars.images[0].filename : ""}`} alt="Card image cap" />
                         </Col>
                         <Col md="8" className="mt-2">
                           <div style={{marginTop:"10px"}}>
@@ -404,10 +415,10 @@ const SearchPage=(props)=> {
                               </Button>
                               </div>
                               {cars.isFeatured ?
-                              <CardText>
-                              <Button className=" ProductContact" color="success" >
+                              <CardText style={{background:"green", cursor:"pointer", width:"30%", textAlign:"center", color:"white" }}>
+                              <h4  >
                                 Featured
-                              </Button>
+                              </h4>
                               </CardText> 
                               : null }
                           </div>

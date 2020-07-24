@@ -29,7 +29,7 @@ const Profile=(props) => {
         }
       };
       const history = useHistory()
-      const [featuredCarData, setfeaturedCarData] = React.useState([])
+      const [userVehicles, setuserVehicles] = React.useState([])
       const [loader, setLoader] = React.useState("true")
       const [userData, setUserData] = React.useState({})
 
@@ -46,7 +46,7 @@ const Profile=(props) => {
         Axios.get('/ads/featured')
         .then(res=>{
             setLoader("true")
-            setfeaturedCarData(res.data)
+            setuserVehicles(res.data)
             setLoader("false")
             console.log(res)
         })
@@ -104,7 +104,7 @@ return(
 
         
          <Col md={12}> <h1 className="text-center underline mb-5 mt-5 color-main-2">Your Ads</h1></Col>
-         {featuredCarData.length >= 1 && loader === "false" ? featuredCarData.map((car, index) => 
+         {userVehicles.length >= 1 && loader === "false" ? userVehicles.map((car, index) => 
             <Col md="4" className="mt-2">
               <Card key={index}>
                 <CardImg top width="100%" className=" custom-featured-img img-fluid img-responsive img-thumbnail" src={`http://localhost:4000/Routes/uploads/${car.images[0].filename}`} alt="Card image cap" />
@@ -145,7 +145,7 @@ return(
               </Card>
             </Col>  
             )
-            :featuredCarData.length <= 0 && loader === "false"
+            :userVehicles.length <= 0 && loader === "false"
             ?
             <div style={{margin: "20% auto", fontSize:"24px", fontWeight:"700", color:"#7a7a7a" }}>
                 No Posts To Show!

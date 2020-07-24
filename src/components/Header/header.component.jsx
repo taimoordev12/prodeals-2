@@ -86,6 +86,7 @@ const Header = (props) => {
   const handleRegistrationSubmit = (event)=> {
     event.preventDefault()
     Axios.post("/register",registerObject).then(res=>{
+      console.log(res)
       setRegisterResponse(res.data)
     })
     .catch(err=>{
@@ -95,12 +96,11 @@ const Header = (props) => {
   const loginOutHandler = () => {
     const URL = window.location.href
     props.onErrorRefresh()
-    localStorage.setItem('token',"")
     if(URL.includes("/prodeals/postad")){
-      window.location.replace('/prodeals');
+      window.location.replace(`${process.env.PUBLIC_URL}/prodeals`);
     }
     else{
-      window.location.reload()
+      window.location.replace(`${process.env.PUBLIC_URL}/prodeals`);
     }
   }
   const hanldeFBLogin = () => {
@@ -174,8 +174,11 @@ const Header = (props) => {
                 {userData && userData.firstName ? userData.firstName : null }
                 </DropdownToggle>
                 <DropdownMenu right>
-                  <DropdownItem  onClick={loginOutHandler} style={{cursor:"pointer",textAlign:"center"}}><strong>Logout</strong></DropdownItem>
+                  <DropdownItem  onClick={()=>{
+                    window.location.replace(`${process.env.PUBLIC_URL}/profile`)
+                  }} style={{cursor:"pointer",textAlign:"center"}}><strong>Profile</strong></DropdownItem>
                   <DropdownItem divider style={{textAlign:"center"}} onClick={loginOutHandler} style={{cursor:"pointer"}}><strong>Logout</strong></DropdownItem>
+                  <DropdownItem  onClick={loginOutHandler} style={{cursor:"pointer",textAlign:"center"}}><strong>Logout</strong></DropdownItem>
                 </DropdownMenu>
               </Dropdown>
               </NavItem>
@@ -197,7 +200,7 @@ const Header = (props) => {
                <div className="col-md-1"></div>
                <div className="col-md-10 bg-adsection">
                   <div className="pt-2">
-                    <Button onClick={hanldeFBLogin} color="success" outline size="lg" block>
+                    <Button onClick={hanldeFBLogin} color="danger" outline size="lg" block>
                     <FontAwesomeIcon icon={faGoogle} />
                     <strong className="ml-1"> Login With Google </strong>
                     </Button>
@@ -234,7 +237,7 @@ const Header = (props) => {
                <div className="col-md-1"></div>
                <div className="col-md-10 bg-adsection">
                   <div className="pt-2">
-                    <Button color="success" outline size="lg" block>
+                    <Button color="danger" outline size="lg" block>
                     <FontAwesomeIcon icon={faGoogle} />
                     <strong className="ml-1"> Login With Google </strong>
                     </Button>

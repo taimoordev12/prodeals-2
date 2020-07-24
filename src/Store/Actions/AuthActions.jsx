@@ -3,8 +3,11 @@ import axios from '../../axios';
 
 
 export const ErrRefresh = () => {
-    localStorage.setItem('token',"")
-    localStorage.setItem("user","")
+    // localStorage.removeItem('token')
+    // localStorage.removeItem('user')
+    // localStorage.removeItem(localStorage.filters)
+    // localStorage.removeitem(localStorage.categoryFooter)
+    localStorage.clear();
     return {
         type: actionTypes.LOGIN_ERR_REFRESH,
         

@@ -8,10 +8,11 @@ const Footer= (props) => {
     const history = useHistory()
 
     const handleFooterSearch = (type) => {
-        localStorage.removeItem("clickedFilter")
+        
         if (window.location.href.includes("/prodeals/search")) {
             window.location.reload()
         }
+        localStorage.setItem("categoryFooter", type)
         history.push({
             pathname: `${process.env.PUBLIC_URL}/search`,
             state: { type: type }

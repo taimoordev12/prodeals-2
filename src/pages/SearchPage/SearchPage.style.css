@@ -21,7 +21,8 @@
 }
 .ProductTitle{
     color:#376692;
-    font-weight: 700
+    font-weight: 700;
+    cursor: pointer;
 }
 .ProductPrice{
     color: #464e60;

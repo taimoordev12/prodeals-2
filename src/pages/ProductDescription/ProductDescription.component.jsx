@@ -28,52 +28,13 @@ const ProductDescripton=(props)=> {
       const [activeIndex, setActiveIndex] = useState(0);
       const [animating, setAnimating] = useState(false);
       const [searchedCarData, setsearchedCarData] = React.useState([])
+      const [userData, setUserData] = React.useState({})
       // states
-      
-      // const items = [
-      //   {
-      //     src: "http://localhost:4000/Routes/uploads/civic.jpg"
-      //   },
-      //   {
-      //     src: "https://www.extremetech.com/wp-content/uploads/2019/12/SONATA-hero-option1-764A5360-edit.jpg"
-      //   },
-      //   {
-      //     src: "https://www.autocar.co.uk/sites/autocar.co.uk/files/images/car-reviews/first-drives/legacy/large-2479-s-classsaloon.jpg"
-      //   },
-      // ];
 
-      // // functions
-      // const next = () => {
-      //   if (animating) return;
-      //   const nextIndex = activeIndex === items.length - 1 ? 0 : activeIndex + 1;
-      //   setActiveIndex(nextIndex);
-      // }
-    
-      // const previous = () => {
-      //   if (animating) return;
-      //   const nextIndex = activeIndex === 0 ? items.length - 1 : activeIndex - 1;
-      //   setActiveIndex(nextIndex);
-      // }
-    
-      // const goToIndex = (newIndex) => {
-      //   if (animating) return;
-      //   setActiveIndex(newIndex);
-      // }
-    
-      // const slides = items.map((item) => {
-      //   return (
-      //     <CarouselItem
-      //       onExiting={() => setAnimating(true)}
-      //       onExited={() => setAnimating(false)}
-      //       key={item.src}
-      //     >
-      //       <img className="SliderImages" src={item.src} alt={item.altText}/>
-      //       <CarouselCaption captionText={item.caption} captionHeader={item.caption} />
-      //     </CarouselItem>
-      //   );
-      // });
       React.useEffect(
         ()=>{
+          let stateUserData = JSON.parse(localStorage.getItem("user"))
+          setUserData(stateUserData)
           window.scrollTo(0, 0)
           Axios.get(`/specific/ad/${props.location.state.vehicleID}`)
          .then(res => {
@@ -82,9 +43,10 @@ const ProductDescripton=(props)=> {
         .catch(err => {
           console.log(err)
         })
-       }, [])
+       },[])
       // functions
       console.log(searchedCarData)
+      console.log(userData)
     return (
        <div className="custom-container margin-class">
                 <Row>
@@ -186,6 +148,30 @@ const ProductDescripton=(props)=> {
                           <Button className="ProductContactButton" color="success" > <FontAwesomeIcon className="mr-1" icon={faPhone} /> {searchedCarData.contact} </Button>
                         </Card>
                       </Col>
+                      {userData && userData._id && searchedCarData && searchedCarData.user && searchedCarData.user.id && userData._id == searchedCarData.user.id ? 
+                      <Col xs="12" className="mt-3">
+                        <Card body className="CardStyles text-center">
+                          <h3 className="SimpleTitle">Ad status</h3>
+                          <hr className="hr-class"/>
+                          <CardText className="SellerInformation mt-3">
+                                 {searchedCarData.isApproved ?<h4 style={{color:"blue"}}>ad is Approved</h4> : <h4 style={{color:"blue"}}>ad is Not Approved</h4> }
+                                {
+                                  searchedCarData.featureRequest ?
+                                <h4 style={{color:"green"}}>Featured Request In Proccess</h4>
+                                :searchedCarData.isFeatured ? null :
+                                <p style={{color:"green"}}><span style={{textDecoration:"underline"}}>Click Here</span> to Request Feature</p>
+                                }
+                                {
+                                  searchedCarData.isFeatured ?
+                                <h4 style={{color:"green"}}>Ad Is Featured</h4>
+                                  : null
+                                }
+                          </CardText>
+                        </Card>
+                      </Col>
+                      :
+                      null 
+                      }
                       <Col xs="12" className="mt-3">
                         <Card body className="CardStyles text-center">
                           <h3 className="SimpleTitle">Seller Information</h3>

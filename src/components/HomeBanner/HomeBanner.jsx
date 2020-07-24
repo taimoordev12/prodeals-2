@@ -56,12 +56,13 @@ const HomeBanner=()=> {
     }
     const handleFilterSubmit = (e) =>{
           const formObject = {
-            isFromMainPage: filterCompany.length <= 0 && filterCompanyModel.length <= 0 && filterModelYear.length <= 0  ?"false" : "true",
+            isFromMainPage: filterCompany.length <= 0 && filterCompanyModel.length <= 0 && filterModelYear.length <= 0  ?"all" : "true",
             company: filterCompany,
             companyModel: filterCompanyModel,
             modelYear: filterModelYear
           }
-          localStorage.removeItem("clickedFilter")
+          // if (company.length <= 0 )
+          localStorage.setItem("filters", JSON.stringify(formObject))
             history.push({
                 pathname: `${process.env.PUBLIC_URL}/search`,
                 state: { searchedData: formObject }
