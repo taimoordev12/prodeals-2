@@ -4,57 +4,69 @@ import { TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, Ca
 import classnames from 'classnames';
 import { faCar, faMotorcycle, faBiking, faTractor, faTruck, faBus} from '@fortawesome/free-solid-svg-icons'
 import TabItem from '../TabItem/TabItem.component';
+import { useHistory } from 'react-router'
 const SearchTab = (props) => {
     const [activeTab, setActiveTab] = useState('1');
-  
+    const history = useHistory()
+    const handleFooterSearch = (type) => {
+      if (window.location.href.includes("/prodeals/search")) {
+          window.location.reload()
+      }
+      localStorage.setItem("categoryFooter", type)
+      history.push({
+          pathname: `${process.env.PUBLIC_URL}/search`,
+          state: { type: type }
+      });
+  }
+
     const toggle = tab => {
       if(activeTab !== tab) setActiveTab(tab);
     }
 
     const CarData =[
       { id:1,
-        icon:<FontAwesomeIcon icon={faCar} />,
-        title:'600cc Cars'
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("car")}  icon={faCar} />,
+        title:'Cars'
 
       },
       { id:2,
-        icon:<FontAwesomeIcon icon={faCar} />,
-        title:'1000cc Cars'
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("car")} icon={faCar} />,
+        title:'Cars'
 
       },
       { id:3,
-        icon:<FontAwesomeIcon icon={faCar} />,
-        title:'1300cc Cars'
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("car")} icon={faCar} />,
+        title:'Cars'
 
       },
       { id:4,
-        icon:<FontAwesomeIcon icon={faCar} />,
-        title:'Cheap Cars'
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("car")} icon={faCar} />,
+        title:'Cars'
 
       },
       { id:5,
-        icon:<FontAwesomeIcon icon={faCar} />,
-        title:'Small Cars'
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("car")} icon={faCar} />,
+        title:'Cars'
 
       },
       { id:6,
-        icon:<FontAwesomeIcon icon={faCar} />,
-        title:'Automatic'
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("car")} icon={faCar} />,
+        title:'Cars'
 
       },
       { id:7,
-        icon:<FontAwesomeIcon icon={faCar} />,
-        title:'Jeep'
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("car")} icon={faCar} />,
+        title:'Cars'
 
       },
       { id:8,
-        icon:<FontAwesomeIcon icon={faCar} />,
-        title:'SUV'
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("car")} icon={faCar} />,
+        title:'Cars'
 
       },
       { id:9,
-        icon:<FontAwesomeIcon icon={faCar} />,
-        title:'Sports'
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("car")} icon={faCar} />,
+        title:'Cars'
 
       }
     ];
@@ -62,56 +74,56 @@ const SearchTab = (props) => {
     const BikeData =[
       {
         id:1,
-        icon:<FontAwesomeIcon icon={faMotorcycle} />,
-        title:'70cc Bike'
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("bike")} icon={faMotorcycle} />,
+        title:'Bike'
 
       },
       {
         id:2,
-        icon:<FontAwesomeIcon icon={faMotorcycle} />,
-        title:'70cc Bike'
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("bike")} icon={faMotorcycle} />,
+        title:'Bike'
 
       },
       {
         id:3,
-        icon:<FontAwesomeIcon icon={faMotorcycle} />,
-        title:'70cc Bike'
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("bike")} icon={faMotorcycle} />,
+        title:'Bike'
 
       },
       {
         id:4,
-        icon:<FontAwesomeIcon icon={faMotorcycle} />,
-        title:'70cc Bike'
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("bike")} icon={faMotorcycle} />,
+        title:'Bike'
 
       },
       {
         id:5,
-        icon:<FontAwesomeIcon icon={faMotorcycle} />,
-        title:'70cc Bike'
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("bike")} icon={faMotorcycle} />,
+        title:'Bike'
 
       },
       {
         id:6,
-        icon:<FontAwesomeIcon icon={faMotorcycle} />,
-        title:'70cc Bike'
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("bike")} icon={faMotorcycle} />,
+        title:'Bike'
 
       },
       {
         id:7,
-        icon:<FontAwesomeIcon icon={faMotorcycle} />,
-        title:'70cc Bike'
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("bike")} icon={faMotorcycle} />,
+        title:'Bike'
 
       },
       {
         id:8,
-        icon:<FontAwesomeIcon icon={faMotorcycle} />,
-        title:'70cc Bike'
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("bike")} icon={faMotorcycle} />,
+        title:'Bike'
 
       },
       {
         id:9,
-        icon:<FontAwesomeIcon icon={faMotorcycle} />,
-        title:'70cc Bike'
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("bike")} icon={faMotorcycle} />,
+        title:'Bike'
 
       },
 
@@ -120,55 +132,55 @@ const SearchTab = (props) => {
     const BicycleData =[
       {
         id:1,
-        icon:<FontAwesomeIcon icon={faBiking} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("bicycle")} icon={faBiking} />,
         title:'Cycle'
 
       },
       {
         id:2,
-        icon:<FontAwesomeIcon icon={faBiking} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("bicycle")} icon={faBiking} />,
         title:'Cycle'
 
       },
       {
         id:3,
-        icon:<FontAwesomeIcon icon={faBiking} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("bicycle")} icon={faBiking} />,
         title:'Cycle'
 
       },
       {
         id:4,
-        icon:<FontAwesomeIcon icon={faBiking} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("bicycle")} icon={faBiking} />,
         title:'Cycle'
 
       },
       {
         id:5,
-        icon:<FontAwesomeIcon icon={faBiking} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("bicycle")} icon={faBiking} />,
         title:'Cycle'
 
       },
       {
         id:6,
-        icon:<FontAwesomeIcon icon={faBiking} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("bicycle")} icon={faBiking} />,
         title:'Cycle'
 
       },
       {
         id:7,
-        icon:<FontAwesomeIcon icon={faBiking} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("bicycle")} icon={faBiking} />,
         title:'Cycle'
 
       },
       {
         id:8,
-        icon:<FontAwesomeIcon icon={faBiking} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("bicycle")} icon={faBiking} />,
         title:'Cycle'
 
       },
       {
         id:9,
-        icon:<FontAwesomeIcon icon={faBiking} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("bicycle")} icon={faBiking} />,
         title:'Cycle'
 
       },
@@ -177,55 +189,55 @@ const SearchTab = (props) => {
     const TractorData =[
       {
         id:1,
-        icon:<FontAwesomeIcon icon={faTractor} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("tractor")} icon={faTractor} />,
         title:'Tractor'
 
       },
       {
         id:2,
-        icon:<FontAwesomeIcon icon={faTractor} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("tractor")} icon={faTractor} />,
         title:'Tractor'
 
       },
       {
         id:3,
-        icon:<FontAwesomeIcon icon={faTractor} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("tractor")} icon={faTractor} />,
         title:'Tractor'
 
       },
       {
         id:4,
-        icon:<FontAwesomeIcon icon={faTractor} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("tractor")} icon={faTractor} />,
         title:'Tractor'
 
       },
       {
         id:5,
-        icon:<FontAwesomeIcon icon={faTractor} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("tractor")} icon={faTractor} />,
         title:'Tractor'
 
       },
       {
         id:6,
-        icon:<FontAwesomeIcon icon={faTractor} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("tractor")} icon={faTractor} />,
         title:'Tractor'
 
       },
       {
         id:7,
-        icon:<FontAwesomeIcon icon={faTractor} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("tractor")} icon={faTractor} />,
         title:'Tractor'
 
       },
       {
         id:8,
-        icon:<FontAwesomeIcon icon={faTractor} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("tractor")} icon={faTractor} />,
         title:'Tractor'
 
       },
       {
         id:9,
-        icon:<FontAwesomeIcon icon={faTractor} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("tractor")} icon={faTractor} />,
         title:'Tractor'
 
       },
@@ -235,55 +247,55 @@ const SearchTab = (props) => {
     const HTVData =[
       {
         id:1,
-        icon:<FontAwesomeIcon icon={faTruck} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("htv")} icon={faTruck} />,
         title:'Truck'
 
       },
       {
         id:2,
-        icon:<FontAwesomeIcon icon={faTruck} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("htv")} icon={faTruck} />,
         title:'Truck'
 
       },
       {
         id:3,
-        icon:<FontAwesomeIcon icon={faTruck} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("htv")} icon={faTruck} />,
         title:'Truck'
 
       },
       {
         id:4,
-        icon:<FontAwesomeIcon icon={faTruck} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("htv")} icon={faTruck} />,
         title:'Truck'
 
       },
       {
         id:5,
-        icon:<FontAwesomeIcon icon={faTruck} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("htv")} icon={faTruck} />,
         title:'Truck'
 
       },
       {
         id:6,
-        icon:<FontAwesomeIcon icon={faTruck} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("htv")} icon={faTruck} />,
         title:'Truck'
 
       },
       {
         id:7,
-        icon:<FontAwesomeIcon icon={faTruck} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("htv")} icon={faTruck} />,
         title:'Truck'
 
       },
       {
         id:8,
-        icon:<FontAwesomeIcon icon={faTruck} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("htv")} icon={faTruck} />,
         title:'Truck'
 
       },
       {
         id:9,
-        icon:<FontAwesomeIcon icon={faTruck} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("htv")} icon={faTruck} />,
         title:'Truck'
 
       },
@@ -293,55 +305,55 @@ const SearchTab = (props) => {
     const RickshawData =[
       {
         id:1,
-        icon:<FontAwesomeIcon icon={faBus} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("rickshaws")} icon={faBus} />,
         title:'Rickshaw'
 
       },
       {
         id:2,
-        icon:<FontAwesomeIcon icon={faBus} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("rickshaws")} icon={faBus} />,
         title:'Rickshaw'
 
       },
       {
         id:3,
-        icon:<FontAwesomeIcon icon={faBus} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("rickshaws")} icon={faBus} />,
         title:'Rickshaw'
 
       },
       {
         id:4,
-        icon:<FontAwesomeIcon icon={faBus} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("rickshaws")} icon={faBus} />,
         title:'Rickshaw'
 
       },
       {
         id:5,
-        icon:<FontAwesomeIcon icon={faBus} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("rickshaws")} icon={faBus} />,
         title:'Rickshaw'
 
       },
       {
         id:6,
-        icon:<FontAwesomeIcon icon={faBus} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("rickshaws")} icon={faBus} />,
         title:'Rickshaw'
 
       },
       {
         id:7,
-        icon:<FontAwesomeIcon icon={faBus} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("rickshaws")} icon={faBus} />,
         title:'Rickshaw'
 
       },
       {
         id:8,
-        icon:<FontAwesomeIcon icon={faBus} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("rickshaws")} icon={faBus} />,
         title:'Rickshaw'
 
       },
       {
         id:9,
-        icon:<FontAwesomeIcon icon={faBus} />,
+        icon:<FontAwesomeIcon style={{cursor:"pointer"}} onClick={()=>handleFooterSearch("rickshaws")} icon={faBus} />,
         title:'Rickshaw'
 
       },
@@ -412,7 +424,7 @@ const SearchTab = (props) => {
               <Col sm="12" className="mt-3">
               <Container>
                 <Row>
-              {CarData.map(data=><TabItem  key={data.id} {...data}/>)}
+              {CarData.map(data=><TabItem key={data.id} {...data}/>)}
                 </Row>
               </Container>
               </Col>

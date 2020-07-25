@@ -29,6 +29,7 @@ const ProductDescripton=(props)=> {
       const [animating, setAnimating] = useState(false);
       const [searchedCarData, setsearchedCarData] = React.useState([])
       const [userData, setUserData] = React.useState({})
+      const [count,setCount] = React.useState("")
       // states
 
       React.useEffect(
@@ -43,10 +44,15 @@ const ProductDescripton=(props)=> {
         .catch(err => {
           console.log(err)
         })
-       },[])
+       },[count])
+       const handleRequestFeature =(vehicleID) => {
+         Axios.get(`/ads/${vehicleID}/request-feature`).then(res=>{
+           alert("You Feature Request sent Successfully!")
+           setCount(vehicleID)
+         })
+       }
+       console.log(searchedCarData)
       // functions
-      console.log(searchedCarData)
-      console.log(userData)
     return (
        <div className="custom-container margin-class">
                 <Row>
@@ -145,7 +151,7 @@ const ProductDescripton=(props)=> {
                         <Card body className="CardStyles text-center">
                           <h3 className="PriceCard"> PKR {searchedCarData && searchedCarData.price ? searchedCarData.price : null}</h3>
                           <hr className="hr-class"/>
-                          <Button className="ProductContactButton" color="success" > <FontAwesomeIcon className="mr-1" icon={faPhone} /> {searchedCarData && searchedCarData.contact ? searchedCarData.contact : null} </Button>
+                          <Button className="ProductContactButton" color="success" > <FontAwesomeIcon className="mr-1" icon={faPhone} /> 0{searchedCarData && searchedCarData.contact ? searchedCarData.contact : null} </Button>
                         </Card>
                       </Col>
                       {userData && userData._id && searchedCarData && searchedCarData.user && searchedCarData.user.id && userData._id == searchedCarData.user.id ? 
@@ -156,10 +162,10 @@ const ProductDescripton=(props)=> {
                           <CardText className="SellerInformation mt-3">
                                  {searchedCarData.isApproved ?<h4 style={{color:"blue"}}>ad is Approved</h4> : <h4 style={{color:"blue"}}>ad is Not Approved</h4> }
                                 {
-                                  searchedCarData.featureRequest ?
+                                  searchedCarData.featureRequest &&  !searchedCarData.isFeatured?
                                 <h4 style={{color:"green"}}>Featured Request In Proccess</h4>
                                 :searchedCarData.isFeatured ? null :
-                                <p style={{color:"green"}}><span style={{textDecoration:"underline"}}>Click Here</span> to Request Feature</p>
+                                <p style={{color:"green"}}><span onClick={()=>handleRequestFeature(searchedCarData._id)} style={{textDecoration:"underline", cursor:"pointer"}}>Click Here</span> to Request Feature</p>
                                 }
                                 {
                                   searchedCarData.isFeatured ?
@@ -172,7 +178,7 @@ const ProductDescripton=(props)=> {
                       :
                       null 
                       }
-                      <Col xs="12" className="mt-3">
+                      {/* <Col xs="12" className="mt-3">
                         <Card body className="CardStyles text-center">
                           <h3 className="SimpleTitle">Seller Information</h3>
                           <hr className="hr-class"/>
@@ -182,7 +188,7 @@ const ProductDescripton=(props)=> {
                                 <p>Member since 19 sep 2019</p>
                           </CardText>
                         </Card>
-                      </Col>
+                      </Col> */}
                       <Col xs="12" className="mt-3">
                         <Card body className="CardStyles">
                           <h3 className="SimpleTitle">Safety tips for transaction</h3>

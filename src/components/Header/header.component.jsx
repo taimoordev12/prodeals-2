@@ -105,7 +105,7 @@ const Header = (props) => {
   }
    
   const hanldeFBLogin = () => {
-    Axios.get('/auth/google').catch(err=>console.log(err))
+    // Axios.get('/auth/google').catch(err=>console.log(err))
   }
   useEffect(
     ()=>{
@@ -197,7 +197,7 @@ const Header = (props) => {
                   <div className="pt-2">
                     <Button onClick={hanldeFBLogin} color="danger" outline size="lg" block>
                     <FontAwesomeIcon icon={faGoogle} />
-                    <strong className="ml-1"> Login With Google </strong>
+                    <a href="http://localhost:4000/auth/google" ><strong className="ml-1"> Login With Google </strong></a>
                     </Button>
                   </div>
                   <hr/>

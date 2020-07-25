@@ -32,6 +32,7 @@ const Profile=(props) => {
       const [userVehicles, setuserVehicles] = React.useState([])
       const [loader, setLoader] = React.useState("true")
       const [userData, setUserData] = React.useState({})
+      const [count, setCount] = React.useState("")
 
       const handleViewAdd = (vehicleID) => {
         history.push({
@@ -39,23 +40,29 @@ const Profile=(props) => {
           state: { vehicleID: vehicleID }
         });
       }
+      const handleDeleteAdd = (vehicleID) =>{
+        Axios.delete(`/ads/${vehicleID}`).then(res=>{
+          alert("Ad Deleted Successfully!")
+        })
+        setCount(vehicleID)
+      }
     useEffect (
         ()=>{
         const userDataStorage = JSON.parse(localStorage.getItem("user"))
         setUserData(userDataStorage)
-        Axios.get('/ads/featured')
+        Axios.get(`/profile/${userDataStorage._id}`)
         .then(res=>{
+          // console.log(res.data)
             setLoader("true")
-            setuserVehicles(res.data)
+            setuserVehicles(res.data.data)
             setLoader("false")
-            console.log(res)
         })
         .catch(err=>{
             console.log(err)
         })
-        },[]
+        },[count]
     )
-    console.log(userData)
+    console.log(userVehicles)
 return(
     <React.Fragment>
     <Container className="mt-5">
@@ -68,19 +75,19 @@ return(
                 <CardText>
                     <div className="right">
                     <CardText className="">
-                    <strong style={{marginRight:"20px"}}>{userData  && userData.firstName ? userData.firstName : null}</strong>
+                    <strong style={{marginRight:"20px"}}>{userData  && userData.firstName ? userData.firstName : null} {userData  && userData.lastName ? userData.lastName : null }</strong>
                     </CardText>
                     </div>
-                    <CardText className="" style={{marginLeft:"20px"}}><strong>First Name </strong></CardText>
+                    <CardText className="" style={{marginLeft:"20px"}}><strong>Name </strong></CardText>
                 </CardText>
-                <CardText>
+                {/* <CardText>
                     <div className="right">
                     <CardText className="">
                         <strong style={{marginRight:"20px"}}>{userData  && userData.lastName ? userData.lastName : null }</strong>
                     </CardText>
                     </div>
                     <CardText className="" style={{marginLeft:"20px"}}><strong>Last Name </strong></CardText>
-                </CardText>
+                </CardText> */}
                 <CardText>
                     <div className="right">
                     <CardText className="">
@@ -136,7 +143,7 @@ return(
                   View
                 </Button>
                 <Button
-                onClick = {()=>handleViewAdd(car._id)}
+                onClick = {()=>handleDeleteAdd(car._id)}
                 type="button"
                 className="mb-2 mx-3"
                 color="danger">
@@ -147,8 +154,8 @@ return(
             )
             :userVehicles.length <= 0 && loader === "false"
             ?
-            <div style={{margin: "20% auto", fontSize:"24px", fontWeight:"700", color:"#7a7a7a" }}>
-                No Posts To Show!
+            <div style={{margin: "5% auto", fontSize:"24px", fontWeight:"700", color:"#7a7a7a" }}>
+                No Ads To Show!
             </div>
             :  <Spinner  color="primary" style={{margin: "20% auto", width: '7rem', height: '7rem' }} />}
          

@@ -21,7 +21,8 @@ import { useEffect } from 'react';
       const TypeOptions = [
         { value: 'car', label: 'Car' },
         { value: 'bike', label: 'MotorCycle' },
-        { value: 'htv', label: 'Truck' },
+        { value: 'htv', label: 'HTV' },
+        { value: 'tractor', label: 'Tractor' },
         { value: 'rickshaw', label: 'Rickshaw' },
         { value: 'bicycle', label: 'Bicycle' }
 
@@ -29,7 +30,6 @@ import { useEffect } from 'react';
       const [modelyear, setModelYear] = React.useState('')
       const [adPhotos, setAdPhotos] = React.useState([])
       const [formsInputs, setFormsInputs] = React.useState({})
-    //   const [finalImages, setFinalImages] = React.useState([])
 
       const handleInputChange = (evt) => {
         const value = evt.target.value;
@@ -39,12 +39,18 @@ import { useEffect } from 'react';
         });
       }
     const onDropImage = (event) => {
+        if (event.target.files.length > 5) {
+            alert("Only 5 files accepted.");
+            event.preventDefault();
+        }
+        else {
         let files = event.target.files;
         console.log(event.target.files)
         setAdPhotos({
         ...adPhotos,
         [event.target.name]:event.target.files
         })
+    }
 
         // const formData = new FormData();
         // files.map((files,index)=>{
@@ -85,13 +91,14 @@ import { useEffect } from 'react';
             }
         }
         ).then(res=>{
-            console.log("done")
+            alert(res.data.message)
+            window.location.reload()
         })
     }
     //   console.log(adPhotos)
     //   console.log(adPhotos.length)
 
-      console.log(adPhotos.images)
+      console.log(modelyear)
 
     return (
        <div className="container-fluid  ">
@@ -120,41 +127,45 @@ import { useEffect } from 'react';
            <div className="row mt-5 ">
                <div className="col-md-1"></div>
                <div className="col-md-10 bg-adsection">
-                   <form onSubmit={handleSubmit}>
+                   <form autocomplete="off" onSubmit={handleSubmit}>
+                   <input autocomplete="off" name="hidden" type="text" style={{display:"none"}}/>
                         <p className='mt-3'>Select Vehicle Type<span style={{color:'red'}}>*</span></p>
-                        <select onChange={handleInputChange} name="vehicleType" className="browser-default custom-select custom-select-lg mb-2">
+                        <select onChange={handleInputChange} name="vehicleType" className="browser-default custom-select custom-select-lg mb-2" required={true}>
+                            <option value="">Select Vehicle Type</option>
                             {TypeOptions.map((options,index)=>(
                             <option key={index} value={options.value}>{options.label}</option>
                             ))}
                         </select>
 
                         <p className='mt-3'>Company Name<span style={{color:'red'}}>*</span></p>
-                        <input onChange={handleInputChange} name="companyName"  className='w-100 py-2'/>
+                        <input required={true} onChange={handleInputChange} name="companyName"  className='w-100 py-2'/>
 
                         <p className='mt-3'>Model Name<span style={{color:'red'}}>*</span></p>
-                        <input onChange={handleInputChange} name="modelName"  className='w-100 py-2'/>
+                        <input required={true} onChange={handleInputChange} name="modelName"  className='w-100 py-2'/>
 
                         <p className='mt-3'>Location<span style={{color:'red'}}>*</span></p>
-                        <select onChange={handleInputChange} name="location" class="browser-default custom-select custom-select-lg mb-2">
+                        <select required={true} onChange={handleInputChange} name="location" class="browser-default custom-select custom-select-lg mb-2" required={true}>
+                            <option value="">Select Location</option>
                             {CityOptions.map((options,index)=>(
                             <option key={index} value={options.value}>{options.label}</option>
                             ))}
                         </select>
 
                         <p className='mt-3'>Registered City<span style={{color:'red'}}>*</span></p>
-                        <input onChange={handleInputChange} name="registeredCity"  type='text' className='w-100 py-2' />
+                        <input required={true} onChange={handleInputChange} name="registeredCity"  type='text' className='w-100 py-2' />
 
                         <p className='mt-3'>Title<span style={{color:'red'}}>*</span></p>
-                        <input onChange={handleInputChange} name="title"  className='w-100 py-2'/>
+                        <input required={true} onChange={handleInputChange} name="title"  className='w-100 py-2'/>
 
                         <p className='mt-3'>Model Year <span style={{color:'red'}}>*</span></p>
-                        <Datetime dateFormat="YYYY" onChange={(date) => setModelYear(date.year())}/>
+                        <Datetime required={true} closeOnSelect dateFormat="YYYY" onChange={(date) => setModelYear(date  && date.year ? date.year() : null)}/>
 
                         <p className='mt-3'>Color<span style={{color:'red'}}>*</span></p>
-                        <input onChange={handleInputChange} name="color"  type='text' className='w-100 py-2' />
+                        <input required={true} onChange={handleInputChange} name="color"  type='text' className='w-100 py-2' />
                         
                         <p className='mt-3'>Transmission<span style={{color:'red'}}>*</span></p>
-                        <select onChange={handleInputChange} name="transmission" class="browser-default custom-select custom-select-lg mb-2">
+                        <select onChange={handleInputChange} name="transmission" class="browser-default custom-select custom-select-lg mb-2" required={true}>
+                            <option value=""> Select Transmission Type</option>
                             <option value="Manual">Manual</option>
                             <option value="Automatic">Automatic</option>
                         </select>
@@ -162,26 +173,26 @@ import { useEffect } from 'react';
                         <p className='mt-3'>Mileage<span style={{color:'red'}}>*</span></p>
                         <InputGroup>
                             <InputGroupAddon addonType="prepend">KM</InputGroupAddon>
-                            <input onChange={handleInputChange} name="mileage"  type='number' className='w-100 py-2' />
+                            <input required={true} onChange={handleInputChange} name="mileage"  type='number' className='w-100 py-2' />
                         </InputGroup>
                         
                         <p className='mt-3'>Engine Capacity<span style={{color:'red'}}>*</span></p>
                         <InputGroup>
                             <InputGroupAddon addonType="prepend">cc</InputGroupAddon>
-                            <input onChange={handleInputChange} name="enginecapacity"  type='number' className='w-100 py-2' />
+                            <input required={true} onChange={handleInputChange} name="enginecapacity"  type='number' className='w-100 py-2' />
                         </InputGroup>
 
                         <p className='mt-3'>Price <span style={{color:'red'}}>*</span></p>
                         <InputGroup>
                             <InputGroupAddon addonType="prepend">PKR</InputGroupAddon>
-                            <input onChange={handleInputChange} name="price"  type='number' className='w-100 py-2 ' />
+                            <input required={true} onChange={handleInputChange} name="price"  type='number' className='w-100 py-2 ' />
                         </InputGroup>
 
                         <p className='mt-3'>Contact Number<span style={{color:'red'}}>*</span></p>
-                        <input onChange={handleInputChange} name="contactNumber"  type='number' className='w-100 py-2' />
+                        <input required={true} onChange={handleInputChange} name="contactNumber"  type='number' className='w-100 py-2' />
                         
                         <p className='mt-3'>Describe Features of your Vehicle </p><span style={{color:'red'}}>*</span>
-                        <Input onChange={handleInputChange}  type="textarea" name="description" id="exampleText" />
+                        <Input required={true} onChange={handleInputChange}  type="textarea" name="description" id="exampleText" />
                         
                         <p className='mt-3'>Upload Images <span style={{color:'red'}}>*</span></p>
                         <input  required = {true} type="file" id="iamges" name="images" multiple onChange={onDropImage}/>
@@ -209,6 +220,7 @@ import { useEffect } from 'react';
        </div>
          
     )
+ 
 }
 
 export default PostAd;

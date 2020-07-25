@@ -150,7 +150,6 @@ const SearchPage=(props)=> {
           localStorage.setItem("filters", JSON.stringify(formObject))
           if (categoryFooter !== naturalFilters.category){
             localStorage.removeItem("categoryFooter")
-            alert("abc")
           }
         }
         else {
@@ -177,7 +176,6 @@ const SearchPage=(props)=> {
             if (naturalFilters.category){
               if (categoryFooter !== naturalFilters.category){
                 localStorage.removeItem("categoryFooter")
-                alert("abc")
               }
             }
           }
