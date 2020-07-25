@@ -40,19 +40,25 @@ import { useEffect } from 'react';
       }
     const onDropImage = (event) => {
         let files = event.target.files;
-        // const formData = new FormData();
-        // files.map((files,index)=>{
-        //     formData.append(`images[${index}]`, files[index])
-        // })
-       console.log(event.target.files)
+        console.log(event.target.files)
         setAdPhotos({
         ...adPhotos,
         [event.target.name]:event.target.files
         })
+
+        // const formData = new FormData();
+        // files.map((files,index)=>{
+        //     formData.append(`images[${index}]`, files[index])
+        // })
+        // setAdPhotos({
+        //     formData
+        // })
+        // console.log(formData)
     }
     const handleSubmit = (e) => {
         e.preventDefault()
         console.log(adPhotos.images)
+        const user = JSON.parse(localStorage.getItem("user"))
         let data=new FormData();
         data.append('category',formsInputs.vehicleType);
         data.append('modelName',formsInputs.modelName);
@@ -67,8 +73,11 @@ import { useEffect } from 'react';
         data.append('transmission',formsInputs.transmission);
         data.append('location',formsInputs.location);
         data.append('title',formsInputs.title);
+        data.append("id",user._id)
         data.append('registeration',formsInputs.registeredCity);
-        data.append('images',[adPhotos])
+        for (const file of adPhotos.images) {
+            data.append('images',file);
+           }
         // console.log(data)
         Axios.post("/create-ad",data,{
             headers: {
@@ -78,8 +87,6 @@ import { useEffect } from 'react';
         ).then(res=>{
             console.log("done")
         })
-        // console.log(finalImages)
-
     }
     //   console.log(adPhotos)
     //   console.log(adPhotos.length)
@@ -177,7 +184,7 @@ import { useEffect } from 'react';
                         <Input onChange={handleInputChange}  type="textarea" name="description" id="exampleText" />
                         
                         <p className='mt-3'>Upload Images <span style={{color:'red'}}>*</span></p>
-                        <input  type="file" id="iamges" name="images" multiple onChange={onDropImage}/>
+                        <input  required = {true} type="file" id="iamges" name="images" multiple onChange={onDropImage}/>
                         {/* <ImageUploader
                             type="file"
                             name="images"

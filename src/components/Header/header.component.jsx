@@ -103,14 +103,9 @@ const Header = (props) => {
       window.location.replace(`${process.env.PUBLIC_URL}/prodeals`);
     }
   }
+   
   const hanldeFBLogin = () => {
-    // Axios.get('/auth/facebook').then(res=>{
-    //   console.log(res)
-
-    // }).catch(err=>{
-    //   console.log(err)
-    // })
-    return
+    Axios.get('/auth/google').catch(err=>console.log(err))
   }
   useEffect(
     ()=>{

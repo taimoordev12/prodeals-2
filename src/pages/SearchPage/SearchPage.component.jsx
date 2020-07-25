@@ -148,6 +148,10 @@ const SearchPage=(props)=> {
               setLoader("false")
           })
           localStorage.setItem("filters", JSON.stringify(formObject))
+          if (categoryFooter !== naturalFilters.category){
+            localStorage.removeItem("categoryFooter")
+            alert("abc")
+          }
         }
         else {
           const formObject = {
@@ -343,7 +347,7 @@ const SearchPage=(props)=> {
                     </select>
                   </div>
                   <div className=" border px-2 p-2 ">
-                    <h6>City</h6>
+                    <h6>Locations</h6>
                     <select class="browser-default custom-select custom-select-md mb-2" onChange={handleCityChange}>
                       <option value="">Select City</option>
                         {LocationFilterData.map((locations,index)=>(

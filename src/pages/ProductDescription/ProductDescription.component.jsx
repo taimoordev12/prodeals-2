@@ -53,8 +53,8 @@ const ProductDescripton=(props)=> {
                   <Col md="8" className="mt-3">
                     <Card className="DescriptionCard">
                         <div className="container">
-                            <CardText className="DescriptionProductTitle">{searchedCarData.title}</CardText>
-                            {searchedCarData.isFeatured ?
+                            <CardText className="DescriptionProductTitle">{searchedCarData && searchedCarData.title ? searchedCarData.title : null}</CardText>
+                            {searchedCarData && searchedCarData.isFeatured ?
                               <CardText>
                               <Button className=" ProductContact" color="success" >
                                 Featured
@@ -63,7 +63,7 @@ const ProductDescripton=(props)=> {
                               : null }
                             <CardText className="ProductLocation">
                                 <FontAwesomeIcon icon={faLocationArrow} />
-                                <strong className="ml-1"> {searchedCarData.location} </strong>
+                                <strong className="ml-1"> {searchedCarData && searchedCarData.location ? searchedCarData.location : null} </strong>
                             </CardText>
                             <Carousel>
                               {searchedCarData && searchedCarData.images ? searchedCarData.images.map((image,index)=>(
@@ -76,26 +76,26 @@ const ProductDescripton=(props)=> {
                                 <Col md="3" sm="6" style={{border:"0.5px solid Gray", backgroundColor:"#e0e0e0", paddingTop:"20px", paddingBottom:"20px" }}>
                                     <div style={{textAlign:"center",marginTop:"15px"}}>
                                         <FontAwesomeIcon icon={faCalendar} size="2x" />
-                                        <h4>{searchedCarData.modelYear}</h4>
+                                        <h4>{searchedCarData && searchedCarData.modelYear ? searchedCarData.modelYear : null}</h4>
                                     </div>
                                 </Col>
                                 <Col md="3" sm="6" style={{border:"0.5px solid Gray" , backgroundColor:"#e0e0e0", paddingTop:"20px", paddingBottom:"20px" }}>
                                     <div style={{textAlign:"center",marginTop:"15px"}}>
                                         <FontAwesomeIcon icon={faCar} size="2x" />
-                                        <h4>{searchedCarData.mileage}KMs</h4>
+                                        <h4>{searchedCarData && searchedCarData.mileage ? searchedCarData.mileage : null}KMs</h4>
                                     </div>
                                 </Col>
                                 <Col md="3" sm="6" style={{border:"0.5px solid Gray" , backgroundColor:"#e0e0e0", paddingTop:"20px", paddingBottom:"20px" }}>
                                     <div style={{textAlign:"center",marginTop:"15px"}}>
                                         <FontAwesomeIcon icon={faGasPump} size="2x" />
-                                        <h4>{searchedCarData.engine}cc</h4>
+                                        <h4>{searchedCarData && searchedCarData.engine ? searchedCarData.engine : null}cc</h4>
 
                                     </div>
                                 </Col>
                                 <Col md="3" sm="6" style={{border:"0.5px solid Gray" , backgroundColor:"#e0e0e0", paddingTop:"20px", paddingBottom:"20px" }}>
                                     <div style={{textAlign:"center",marginTop:"15px"}}>
                                         <FontAwesomeIcon icon={faCog} size="2x" />
-                                        <h4>{searchedCarData.transmission}</h4>
+                                        <h4>{ searchedCarData && searchedCarData.transmission ? searchedCarData.transmission : null}</h4>
                                     </div>
                                 </Col>
                                 <div className=" container " style={{overflow:"auto"}}>
@@ -105,23 +105,23 @@ const ProductDescripton=(props)=> {
                                             <table className="TableStyles" style={{width:"100%"}}>
                                                 <tr>
                                                     <th className="TableStyles">Registered City</th>
-                                                    <td className="TableStyles" style={{textAlign:"right"}}>{searchedCarData.registeration}</td>
+                                                    <td className="TableStyles" style={{textAlign:"right"}}>{searchedCarData && searchedCarData.registeration ? searchedCarData.registeration : null}</td>
                                                 </tr>
                                                 <tr>
                                                     <th className="TableStyles">Company</th>
-                                                    <td className="TableStyles" style={{textAlign:"right"}}>{searchedCarData.company}</td>
+                                                    <td className="TableStyles" style={{textAlign:"right"}}>{searchedCarData && searchedCarData.company ? searchedCarData.company : null}</td>
                                                 </tr>
                                                 <tr>
                                                     <th className="TableStyles">Color</th>
-                                                    <td className="TableStyles" style={{textAlign:"right"}}>{searchedCarData.color}</td>
+                                                    <td className="TableStyles" style={{textAlign:"right"}}>{searchedCarData && searchedCarData.color ? searchedCarData.color : null}</td>
                                                 </tr>
                                                 <tr>
                                                     <th className="TableStyles">Engine Capacity</th>
-                                                    <td className="TableStyles" style={{textAlign:"right"}}>{searchedCarData.mileage}cc</td>
+                                                    <td className="TableStyles" style={{textAlign:"right"}}>{searchedCarData && searchedCarData.mileage ? searchedCarData.mileage : null}cc</td>
                                                 </tr>
                                                 <tr>
                                                     <th className="TableStyles">Ad Ref #</th>
-                                                    <td className="TableStyles" style={{textAlign:"right"}}>{searchedCarData._id}</td>
+                                                    <td className="TableStyles" style={{textAlign:"right"}}>{searchedCarData && searchedCarData._id ? searchedCarData._id : null}</td>
                                                 </tr>
                                             </table>
                                         </Col>
@@ -130,7 +130,7 @@ const ProductDescripton=(props)=> {
                                 <div className="">
                                     <h4 className="DescriptionProductFeature container my-4"> Sellers Comments </h4>
                                     <div className="SellersComments">
-                                    <p className="container">{searchedCarData.description}</p>
+                                    <p className="container">{searchedCarData && searchedCarData.description ? searchedCarData.description : null}</p>
 
                                       <p className="container">Mention Prodeals when calling Seller to get a good deal.</p>
                                     </div>
@@ -143,9 +143,9 @@ const ProductDescripton=(props)=> {
                     <Row>
                       <Col xs="12">
                         <Card body className="CardStyles text-center">
-                          <h3 className="PriceCard"> PKR {searchedCarData.price}</h3>
+                          <h3 className="PriceCard"> PKR {searchedCarData && searchedCarData.price ? searchedCarData.price : null}</h3>
                           <hr className="hr-class"/>
-                          <Button className="ProductContactButton" color="success" > <FontAwesomeIcon className="mr-1" icon={faPhone} /> {searchedCarData.contact} </Button>
+                          <Button className="ProductContactButton" color="success" > <FontAwesomeIcon className="mr-1" icon={faPhone} /> {searchedCarData && searchedCarData.contact ? searchedCarData.contact : null} </Button>
                         </Card>
                       </Col>
                       {userData && userData._id && searchedCarData && searchedCarData.user && searchedCarData.user.id && userData._id == searchedCarData.user.id ? 
@@ -178,7 +178,7 @@ const ProductDescripton=(props)=> {
                           <hr className="hr-class"/>
                           <CardText className="SellerInformation mt-3">
                                 <FontAwesomeIcon icon={faUser} size="2x" />
-                                 <h4>{searchedCarData.user ? searchedCarData.user.username : null}</h4>
+                                 <h4>{searchedCarData && searchedCarData.user ? searchedCarData.user.username : null}</h4>
                                 <p>Member since 19 sep 2019</p>
                           </CardText>
                         </Card>
