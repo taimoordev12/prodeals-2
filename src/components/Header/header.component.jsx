@@ -35,40 +35,63 @@ const Header = (props) => {
   const [token, setToken] = useState("")
   const [userData, setUserData]= useState({})
   const [menuDropDownOpen ,setMenuDropDownOpen]=useState(false)
+  const [resetPassword, setResetPassword] = useState(false)
+  const [resetPasswordObjet ,setResetPasswordObjet] = useState({})
+  const [emailVerifyResponse ,setEmailVerifyResponse] = useState("")
 
   const toggle = () => setIsOpen(!isOpen);
   const loginHandler = () => {
     setRegiterPop(false)
     setloginPop(true)
+    setResetPassword(false)
   }
   const registerPopHandler = () => {
     setloginPop(false)
     setRegiterPop(true)
+    setResetPassword(false)
   }
   const loginPopHandler = () => {
     setloginPop(true)
     setRegiterPop(false)
+    setResetPassword(false)
+    setEmailVerifyResponse("")
+
   }
   const CloseModels = () => {
     setloginPop(false)
     setRegiterPop(false)
+    setResetPassword(false)
+
   }
+  const resetPasswordHandler = () => {
+    setResetPassword(true)
+    setloginPop(false)
+    setRegiterPop(false)
+    
+  }
+  const dropDownToggler = () => {
+    setMenuDropDownOpen(!menuDropDownOpen)
+  }
+
   const handleInputChange = (event) => {
     setLoginObject({
       ...loginObject,
       [event.target.name]:event.target.value
     })
   }
-  const dropDownToggler = () => {
-    setMenuDropDownOpen(!menuDropDownOpen)
-  }
-
   const handleRegisterInpustChange = (event) => {
     setRegisterObject({
       ...registerObject,
       [event.target.name]:event.target.value
     })
   }
+  const handleResetInputChange = (event) => {
+    setResetPasswordObjet({
+      ...resetPasswordObjet,
+      [event.target.name]:event.target.value
+    })
+  }
+
   const handleLoginSubmit= async (event)=>{
     event.preventDefault()
     await props.onLogin(loginObject)
@@ -83,6 +106,15 @@ const Header = (props) => {
     }, 1000);
    
   }
+  const hanldeFBLogin = () => {
+    Axios.get('/auth/google')
+    .then(res=>{
+      console.log(res)
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+  }
   const handleRegistrationSubmit = (event)=> {
     event.preventDefault()
     Axios.post("/register",registerObject).then(res=>{
@@ -93,6 +125,16 @@ const Header = (props) => {
       console.log(err)
     })
   }
+  const handleEmailVerfySubmit = (event) => {
+    event.preventDefault()
+    Axios.post("/forgot", resetPasswordObjet).then(res=>{
+      setEmailVerifyResponse(res.data.message)
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+  }
+
   const loginOutHandler = () => {
     const URL = window.location.href
     props.onErrorRefresh()
@@ -103,10 +145,7 @@ const Header = (props) => {
       window.location.replace(`${process.env.PUBLIC_URL}/prodeals`);
     }
   }
-   
-  const hanldeFBLogin = () => {
-    // Axios.get('/auth/google').catch(err=>console.log(err))
-  }
+  
   useEffect(
     ()=>{
       let userData = localStorage.getItem("user")
@@ -114,7 +153,7 @@ const Header = (props) => {
       userData = userData && userData.length > 0 ? JSON.parse(userData) : null
       setUserData(userData)
     },[token])
-    console.log(userData)
+    console.log(emailVerifyResponse)
   return (
     <div>
       <Navbar color="light" light expand="md">
@@ -187,7 +226,7 @@ const Header = (props) => {
         
    
       </Navbar>
-        {loginPop ?
+        { loginPop ?
         <Modal toggle={CloseModels} backdrop={true} isOpen={loginPop}>
         <ModalHeader >Login</ModalHeader>
         <ModalBody>
@@ -197,7 +236,7 @@ const Header = (props) => {
                   <div className="pt-2">
                     <Button onClick={hanldeFBLogin} color="danger" outline size="lg" block>
                     <FontAwesomeIcon icon={faGoogle} />
-                    <a href="http://localhost:4000/auth/google" ><strong className="ml-1"> Login With Google </strong></a>
+                    <a ><strong className="ml-1"> Login With Google </strong></a>
                     </Button>
                   </div>
                   <hr/>
@@ -211,6 +250,8 @@ const Header = (props) => {
                         <div className="text-center  mb-2 mt-2">
                         {loginResponse ? <p style={{color:"red"}}className="mt-1 mb-1"><strong>Email or Password is Incorrect</strong></p> : null}
                         <ButtonCustom type="submit">Login</ButtonCustom>
+                    <p className={"mt-2 pt-2"} style={{color: "blue", textDecoration:"underline", cursor:"pointer" }} onClick={resetPasswordHandler}>Forget Password!</p>
+
                         </div>
                    </form>
                </div>
@@ -219,13 +260,48 @@ const Header = (props) => {
            </div>
         </ModalBody>
         <ModalFooter>
-          <p style={{color: "blue", textDecoration:"underline", cursor:"pointer"}} onClick={registerPopHandler}>Regiter to our site</p>
+          <p style={{color: "blue", textDecoration:"underline", cursor:"pointer"}} onClick={registerPopHandler}>Register</p>
         </ModalFooter>
       </Modal>
-      :
-      registerPop ?
+      : null 
+      }
+
+      { resetPassword ?
+        <Modal toggle={CloseModels} backdrop={true} isOpen={resetPassword}>
+        <ModalHeader >Email Verification</ModalHeader>
+        <ModalBody>
+        <div className="row">
+               <div className="col-md-1"></div>
+               <div className="col-md-10 bg-adsection">
+                   <form autocomplete="off" id="resetEmailForm" onSubmit={handleEmailVerfySubmit}>
+                   <input autocomplete="off" name="hidden" type="text" style={{display:"none"}}/>
+                        <p className='mt-3'>Email</p>
+                        <input onChange={handleResetInputChange} name="email" value={resetPasswordObjet && resetPasswordObjet.email ? resetPasswordObjet.email : "" } placeholder="something@some.com"  type='email' className='w-100 py-2' />
+                        
+                        <div className="text-center  mb-2 mt-2">
+                          {emailVerifyResponse ? 
+                          <p className="mt-1 mb-1" style={emailVerifyResponse.includes("No account") ? { color:"red"} : null}>
+                            <strong>{emailVerifyResponse}</strong>
+                          </p>
+                          : null}
+                          <ButtonCustom type="submit">Submit</ButtonCustom>
+                        </div>
+                   </form>
+               </div>
+               <div className="col-md-1"></div>
+
+           </div>
+        </ModalBody>
+        <ModalFooter>
+          <p style={{color: "blue", textDecoration:"underline", cursor:"pointer"}} onClick={loginPopHandler}>Login</p>
+        </ModalFooter>
+      </Modal>
+      : null 
+      }
+
+      {registerPop ?
         <Modal toggle={CloseModels} backdrop={true} isOpen={registerPop}>
-        <ModalHeader >Register</ModalHeader>
+          <ModalHeader >Register</ModalHeader>
         <ModalBody>
 
         <div className="row">

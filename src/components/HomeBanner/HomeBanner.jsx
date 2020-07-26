@@ -59,9 +59,14 @@ const HomeBanner=()=> {
             isFromMainPage: filterCompany.length <= 0 && filterCompanyModel.length <= 0 && filterModelYear.length <= 0  ?"all" : "true",
             company: filterCompany,
             companyModel: filterCompanyModel,
-            modelYear: filterModelYear
+            modelYear: filterModelYear,
+            category: '',
+            minPrice: '',
+            maxPrice: '',
+            city: ''
           }
           // if (company.length <= 0 )
+          localStorage.removeItem("categoryFooter")
           localStorage.setItem("filters", JSON.stringify(formObject))
             history.push({
                 pathname: `${process.env.PUBLIC_URL}/search`,

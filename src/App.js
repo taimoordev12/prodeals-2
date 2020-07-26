@@ -11,6 +11,7 @@ import PostAd from '../src/pages/PostAd/PostAd.component';
 import SearchPage from './pages/SearchPage/SearchPage.component';
 import ProductDescriptionPage from './pages/ProductDescription/ProductDescription.component';
 import Profile from './pages/Profile/profile'
+import ResetPasswordModel from './components/ResetPassword'
 
 const App=()=> {
   return (
@@ -38,6 +39,7 @@ const App=()=> {
     {/* protected routes */}
     <Route path={`${process.env.PUBLIC_URL}/search`} component={SearchPage}/> 
     <Route path={`${process.env.PUBLIC_URL}/product/description`} component={ProductDescriptionPage}/>
+    <Route path ={`${process.env.PUBLIC_URL}/reset/:token`} component={ResetPasswordModel}/>
     <Redirect to={`${process.env.PUBLIC_URL}/`} />
     </Switch>
     <Footer/>
