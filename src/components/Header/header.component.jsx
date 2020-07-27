@@ -9,6 +9,7 @@ import {faGoogle} from '@fortawesome/free-brands-svg-icons';
 import { connect } from 'react-redux';
 import * as actions from '../../Store/Actions/index';
 import { GoogleLogin } from 'react-google-login'
+import { useHistory } from 'react-router'
 import { Spinner } from 'reactstrap';
 
 
@@ -29,6 +30,7 @@ import {
 import { useEffect } from 'react';
 
 const Header = (props) => {
+  const history = useHistory()
   const [isOpen, setIsOpen] = useState(false);
   const [loginPop, setloginPop] = useState(false);
   const [registerPop, setRegiterPop] = useState(false);
@@ -44,12 +46,16 @@ const Header = (props) => {
   const [emailVerifyResponse ,setEmailVerifyResponse] = useState("")
   const [googleLoader, setGoogleLoader] = useState(false)
   const [loginLoader, setLoginLoader] = useState(false)
+  const [postRouteFromLogin, setPostRouteFromLogin] = useState(false)
 
   const toggle = () => setIsOpen(!isOpen);
-  const loginHandler = () => {
+  const loginHandler = (postRoute) => {
     setRegiterPop(false)
     setloginPop(true)
     setResetPassword(false)
+    if(postRoute==="postAd"){
+      setPostRouteFromLogin(true)
+    }
   }
   const registerPopHandler = () => {
     setloginPop(false)
@@ -107,13 +113,20 @@ const Header = (props) => {
     setTimeout(() => {
       if (localStorage.getItem("token") && localStorage.getItem("token").length > 0 ){
         setLoginLoader(false)
+        if (postRouteFromLogin) {
+          alert(postRouteFromLogin)
+          // history.push("/postad")
+          window.location.replace(`${process.env.PUBLIC_URL}/postad`);
+        }
+        else{
         window.location.reload()
+        }
       }
       else {
         setLoginLoader(false)
         setLoginResponse(true)
       }
-    }, 1500);
+    }, 2000);
    
   }
   const hanldeFBLogin = (response) => {
@@ -137,13 +150,20 @@ const Header = (props) => {
     setTimeout(() => {
       if (localStorage.getItem("token") && localStorage.getItem("token").length > 0 ){
         setGoogleLoader(false)
+        if (postRouteFromLogin) {
+          alert(postRouteFromLogin)
+          // history.push("/postad")
+          window.location.replace(`${process.env.PUBLIC_URL}/postad`);
+        }
+        else{
         window.location.reload()
+        }
       }
       else {
         setGoogleLoader(false)
         setLoginResponse(true)
       }
-    }, 500);
+    }, 2000);
   }
   const handleFBFailure = () => {
       alert("failed")
@@ -171,6 +191,7 @@ const Header = (props) => {
   const loginOutHandler = () => {
     const URL = window.location.href
     props.onErrorRefresh()
+    setPostRouteFromLogin(false)
     if(URL.includes("/prodeals/postad")){
       window.location.replace(`${process.env.PUBLIC_URL}/prodeals`);
     }
@@ -230,7 +251,7 @@ const Header = (props) => {
             <NavItem>
             {token && token.length > 0 ? <NavLink href={`${process.env.PUBLIC_URL}/postad`}><Button color="warning">Post Ad</Button></NavLink>
               :
-              <NavLink><Button color="primary" onClick={loginHandler}>Post Ad</Button></NavLink>
+              <NavLink><Button color="primary" onClick={()=>loginHandler("postAd")}>Post Ad</Button></NavLink>
               }
             </NavItem>
             <NavItem>
