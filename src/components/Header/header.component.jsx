@@ -8,6 +8,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faGoogle} from '@fortawesome/free-brands-svg-icons';
 import { connect } from 'react-redux';
 import * as actions from '../../Store/Actions/index';
+import { GoogleLogin } from 'react-google-login'
+import { Spinner } from 'reactstrap';
+
+
 import {
   Collapse,
   Navbar,
@@ -38,6 +42,8 @@ const Header = (props) => {
   const [resetPassword, setResetPassword] = useState(false)
   const [resetPasswordObjet ,setResetPasswordObjet] = useState({})
   const [emailVerifyResponse ,setEmailVerifyResponse] = useState("")
+  const [googleLoader, setGoogleLoader] = useState(false)
+  const [loginLoader, setLoginLoader] = useState(false)
 
   const toggle = () => setIsOpen(!isOpen);
   const loginHandler = () => {
@@ -94,26 +100,53 @@ const Header = (props) => {
 
   const handleLoginSubmit= async (event)=>{
     event.preventDefault()
+    setLoginLoader(true)
+    setLoginResponse(false)
     await props.onLogin(loginObject)
     // const responseToken = localStorage.getItem("token")
     setTimeout(() => {
       if (localStorage.getItem("token") && localStorage.getItem("token").length > 0 ){
+        setLoginLoader(false)
         window.location.reload()
       }
       else {
+        setLoginLoader(false)
         setLoginResponse(true)
       }
-    }, 1000);
+    }, 1500);
    
   }
-  const hanldeFBLogin = () => {
-    Axios.get('/auth/google')
+  const hanldeFBLogin = (response) => {
+    const profileObj = {
+      email : response.profileObj.email,
+      familyName : response.profileObj.familyName,
+      givenName : response.profileObj.givenName,
+      googleId : response.profileObj.googleId
+    }
+    setGoogleLoader(true)
+    console.log(profileObj)
+    Axios.post('/google/login', {profileObj})
     .then(res=>{
       console.log(res)
+      localStorage.setItem('token',res.data._id)
+      localStorage.setItem('user',JSON.stringify(res.data))
     })
     .catch(err=>{
       console.log(err)
     })
+    setTimeout(() => {
+      if (localStorage.getItem("token") && localStorage.getItem("token").length > 0 ){
+        setGoogleLoader(false)
+        window.location.reload()
+      }
+      else {
+        setGoogleLoader(false)
+        setLoginResponse(true)
+      }
+    }, 500);
+  }
+  const handleFBFailure = () => {
+      alert("failed")
   }
   const handleRegistrationSubmit = (event)=> {
     event.preventDefault()
@@ -234,10 +267,34 @@ const Header = (props) => {
                <div className="col-md-1"></div>
                <div className="col-md-10 bg-adsection">
                   <div className="pt-2">
-                    <Button onClick={hanldeFBLogin} color="danger" outline size="lg" block>
-                    <FontAwesomeIcon icon={faGoogle} />
-                    <a ><strong className="ml-1"> Login With Google </strong></a>
-                    </Button>
+                      <GoogleLogin
+                      clientId="815523915920-21pg2ae0b07htjfl4t7nd1hb9crtth18.apps.googleusercontent.com"
+                      render={renderProps => (
+                        <Button 
+                        color="danger"
+                        outline 
+                        size="lg"
+                        block
+                        onClick={renderProps.onClick}
+                        >
+                        {
+                          googleLoader ? null
+                          : 
+                          <FontAwesomeIcon icon={faGoogle} />
+                        }
+                        {
+                          googleLoader ? 
+                          <Spinner style={{margin: "auto auto", width: '1rem', height: '1rem' }}/>
+                          :
+                          <strong className="ml-1"> Login With Google </strong>
+                        }
+                        </Button>
+                      )}
+                      buttonText="Login"
+                      onSuccess={hanldeFBLogin}
+                      onFailure={handleFBFailure}
+                      cookiePolicy={'single_host_origin'}
+                      />
                   </div>
                   <hr/>
                    <form autocomplete="off" id="loginForm" onSubmit={handleLoginSubmit}>
@@ -249,7 +306,11 @@ const Header = (props) => {
                         <input onChange={handleInputChange} value={loginObject && loginObject.password ? loginObject.password : null } name="password" type="password" placeholder="password" className='w-100 py-2'/>
                         <div className="text-center  mb-2 mt-2">
                         {loginResponse ? <p style={{color:"red"}}className="mt-1 mb-1"><strong>Email or Password is Incorrect</strong></p> : null}
+                        {loginLoader ? 
+                        <Spinner color="primary"style={{margin: "auto auto", width: '1rem', height: '1rem' }}/>
+                        :
                         <ButtonCustom type="submit">Login</ButtonCustom>
+                        }
                     <p className={"mt-2 pt-2"} style={{color: "blue", textDecoration:"underline", cursor:"pointer" }} onClick={resetPasswordHandler}>Forget Password!</p>
 
                         </div>
@@ -308,10 +369,25 @@ const Header = (props) => {
                <div className="col-md-1"></div>
                <div className="col-md-10 bg-adsection">
                   <div className="pt-2">
-                    <Button color="danger" outline size="lg" block>
-                    <FontAwesomeIcon icon={faGoogle} />
-                    <strong className="ml-1"> Login With Google </strong>
-                    </Button>
+                    <GoogleLogin
+                      clientId="815523915920-21pg2ae0b07htjfl4t7nd1hb9crtth18.apps.googleusercontent.com"
+                      render={renderProps => (
+                        <Button 
+                        color="danger"
+                        outline 
+                        size="lg"
+                        block
+                        onClick={renderProps.onClick}
+                        >
+                        <FontAwesomeIcon icon={faGoogle} />
+                        <strong className="ml-1"> Login With Google </strong>
+                        </Button>
+                      )}
+                      buttonText="Login"
+                      onSuccess={hanldeFBLogin}
+                      onFailure={handleFBFailure}
+                      cookiePolicy={'single_host_origin'}
+                      />
                   </div>
                   <hr/>
                   <form autocomplete="off" id="registerForm" onSubmit={handleRegistrationSubmit}>

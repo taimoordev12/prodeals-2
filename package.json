@@ -21,6 +21,7 @@
     "react-datetime": "^2.16.3",
     "react-dom": "^16.13.1",
     "react-fontawesome": "^1.7.1",
+    "react-google-login": "^5.1.21",
     "react-images-upload": "^1.2.8",
     "react-js-pagination": "^3.0.3",
     "react-multi-carousel": "^2.5.5",

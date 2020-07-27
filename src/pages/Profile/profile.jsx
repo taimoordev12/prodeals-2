@@ -96,6 +96,7 @@ return(
                     </div>
                     <CardText className="" style={{marginLeft:"20px"}}><strong>Email</strong></CardText>
                 </CardText>
+                {userData && userData.phone ? 
                 <CardText>
                     <div className="right">
                     <CardText className="">
@@ -104,6 +105,7 @@ return(
                     </div>
                     <CardText className="" style={{marginLeft:"20px"}}><strong>Contact#</strong></CardText>
                 </CardText>
+                : null}
                 </CardBody>
                 </Card>
             </Col>
