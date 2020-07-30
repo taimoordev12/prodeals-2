@@ -5,6 +5,7 @@ import '../SearchPage/SearchPage.style.css';
 import {Button,Input, Card, CardImg, CardText, Row, Col} from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLocationArrow, faPhone } from '@fortawesome/free-solid-svg-icons';
+import { useMediaPredicate } from "react-media-hook";
 import Pagination from "react-js-pagination";
 import paginate from "../../components/paginate"
 // import history from '../../history';
@@ -22,6 +23,7 @@ const SearchPage=(props)=> {
       const [categoryFromFooter, setCategoryFromFooter] = React.useState(localStorage.getItem("categoryFooter") ? localStorage.getItem("categoryFooter") : null)
       const [searchCarData, setsearchCarData] = React.useState([])
       const [loader, setLoader] = React.useState("true")
+      const [mediaWidth768, setMediaWidth768] = React.useState(false)
       // filters state values
       const [minPrice, setMinPrice] = React.useState("")
       const [maxPrice, setMaxPrice] = React.useState("")
@@ -81,6 +83,7 @@ const SearchPage=(props)=> {
         e.preventDefault()
         if(filterCategory.length > 0 && filterModelYear.length <= 0 && filterCompanyModel.length <= 0 && filterCompany.length <= 0 && filterCity.length <= 0  && filterRegistrationCity.length <= 0 && minPrice.length <= 0 && maxPrice <=0 ) {
           const formObject = {
+            
             category: filterCategory
           }
           Axios.get(`/show/${filterCategory}`)
@@ -137,6 +140,10 @@ const SearchPage=(props)=> {
         console.log(`active page is ${pageNumber}`);
         setActivePage(pageNumber);
       }
+      const handleMobileFilters = () =>{
+        setMediaWidth768(!mediaWidth768)
+      }
+
       // component mount states handlers
       React.useEffect(
         ()=>{
@@ -148,7 +155,7 @@ const SearchPage=(props)=> {
               setLoader("false")
             })
           }
-          else if(formObject.isFromMainPage === "true" ) {
+          else if(formObject && formObject.isFromMainPage === "true" ) {
             Axios.post( "/search/filters", {formObject})
             .then(res => {
               setLoader("true")
@@ -159,7 +166,7 @@ const SearchPage=(props)=> {
               console.log(err)
             })
           }
-          else if(formObject.isFromMainPage === "false" ) {
+          else if(formObject && formObject.isFromMainPage === "false" ) {
             Axios.post( "/search/filters", {formObject})
             .then(res => {
               setLoader("true")
@@ -181,25 +188,6 @@ const SearchPage=(props)=> {
               console.log(err)
             })
           }
-          // if(filterCategory.length > 0){
-          //   Axios.get(`/search/companies/${filterCategory}`)
-          //   .then(res=>{
-          //     setCompaniesDBData (res.data)
-          //   })
-          //   .catch(err=>{
-          //     console.log(err)
-          //   })
-          // }
-          // if(filterCategory.length > 0 && filterCompany.length > 0){
-          //   Axios.get(`/search/models/${filterCategory}/${filterCompany}`)
-          //   .then(res=>{
-          //     console.log(res)
-          //     setModelsDBData (res.data)
-          //   })
-          //   .catch(err=>{
-          //     console.log(err)
-          //   })
-          // }
           Axios.get("/locations")
           .then(res=>{
             console.log(res)
@@ -211,32 +199,72 @@ const SearchPage=(props)=> {
        },[categoryFromFooter])
        // Functions
        const searchCarDataPagination = paginate(searchCarData, activePage, pageSize)
-
+       const biggerThan768 = useMediaPredicate("(min-width: 768px)");
+       let autoFilters = null
+       if (biggerThan768){
+        autoFilters = (
+          <div className="col-md-3 mt-2 ">
+          <MainFilters
+          handleFilterSubmit={handleFilterSubmit}
+          handleClearFilters={handleClearFilters}
+          handleMinPriceChange={handleMinPriceChange}
+          handleMaxPriceChange={handleMaxPriceChange}
+          handleCategoryChange={handleCategoryChange}
+          handleCompanyChange={handleCompanyChange}
+          handleCompanyModelChange={handleCompanyModelChange}
+          handleModelYearChange={handleModelYearChange}
+          handleCityChange={handleCityChange}
+          filterCategory={filterCategory}
+          filterCompany={filterCompany}
+          LocationFilterData={LocationFilterData}
+          filterCity={filterCity}
+          minPrice={minPrice}
+          maxPrice={maxPrice}
+          filterCompanyModel={filterCompanyModel}
+          filterModelYear={filterModelYear}
+          
+          />
+        </div>
+        )
+       }
+       else {
+        autoFilters = (
+          <div autoFocus className="col-md-3 mt-2">
+            <Button onClick={handleMobileFilters}color="primary">
+              Show Filters
+            </Button>
+            {mediaWidth768 ?
+            <MainFilters
+            handleFilterSubmit={handleFilterSubmit}
+            handleClearFilters={handleClearFilters}
+            handleMinPriceChange={handleMinPriceChange}
+            handleMaxPriceChange={handleMaxPriceChange}
+            handleCategoryChange={handleCategoryChange}
+            handleCompanyChange={handleCompanyChange}
+            handleCompanyModelChange={handleCompanyModelChange}
+            handleModelYearChange={handleModelYearChange}
+            handleCityChange={handleCityChange}
+            filterCategory={filterCategory}
+            filterCompany={filterCompany}
+            LocationFilterData={LocationFilterData}
+            filterCity={filterCity}
+            minPrice={minPrice}
+            maxPrice={maxPrice}
+            filterCompanyModel={filterCompanyModel}
+            filterModelYear={filterModelYear}
+            />
+            :
+            null
+          } 
+          </div>
+        )
+       }
+     console.log(mediaWidth768)
     return (
        <div className="custom-container margin-class">
            <div className="row">
-              <div className="col-md-3 mt-2 ">
-                <MainFilters
-                handleFilterSubmit={handleFilterSubmit}
-                handleClearFilters={handleClearFilters}
-                handleMinPriceChange={handleMinPriceChange}
-                handleMaxPriceChange={handleMaxPriceChange}
-                handleCategoryChange={handleCategoryChange}
-                handleCompanyChange={handleCompanyChange}
-                handleCompanyModelChange={handleCompanyModelChange}
-                handleModelYearChange={handleModelYearChange}
-                handleCityChange={handleCityChange}
-                filterCategory={filterCategory}
-                filterCompany={filterCompany}
-                LocationFilterData={LocationFilterData}
-                filterCity={filterCity}
-                minPrice={minPrice}
-                maxPrice={maxPrice}
-                filterCompanyModel={filterCompanyModel}
-                filterModelYear={filterModelYear}
-                
-                />
-              </div>
+              {autoFilters}
+              
               <div className="col-md-9 mt-2">
                 <Row>
                   {searchCarDataPagination.length >= 1 && loader === "false" ? searchCarDataPagination.map((cars,index)=>(
