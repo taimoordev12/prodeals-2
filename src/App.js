@@ -12,6 +12,8 @@ import SearchPage from './pages/SearchPage/SearchPage.component';
 import ProductDescriptionPage from './pages/ProductDescription/ProductDescription.component';
 import Profile from './pages/Profile/profile'
 import ResetPasswordModel from './components/ResetPassword'
+import AdminPanel from '../src/components/AdminPanel/adminPanel.component'
+
 
 const App=()=> {
   return (
