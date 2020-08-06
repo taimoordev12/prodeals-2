@@ -78,7 +78,7 @@ import { useEffect } from 'react';
         data.append('price',formsInputs.price);
         data.append('transmission',formsInputs.transmission);
         data.append('location',formsInputs.location);
-        data.append('title',formsInputs.title);
+        data.append('title',defaultTitle);
         data.append("id",user._id)
         data.append('registeration',formsInputs.registeredCity);
         for (const file of adPhotos.images) {
@@ -99,6 +99,9 @@ import { useEffect } from 'react';
     //   console.log(adPhotos.length)
 
       console.log(modelyear)
+      console.log(formsInputs)
+      const defaultTitle = ` ${formsInputs && formsInputs.companyName !== undefined ? formsInputs.companyName : "" } ${formsInputs && formsInputs.modelName !== undefined ? formsInputs.modelName : ""} ${modelyear && modelyear !== undefined ? modelyear : "" }`
+
 
     return (
        <div className="container-fluid  ">
@@ -136,12 +139,18 @@ import { useEffect } from 'react';
                             <option key={index} value={options.value}>{options.label}</option>
                             ))}
                         </select>
+                        
+                        <p className='mt-3'>Title<span style={{color:'red'}}>*</span></p>
+                        <input disabled value={defaultTitle}onChange={handleInputChange} name="title"  className='w-100 py-2'/>
 
                         <p className='mt-3'>Company Name<span style={{color:'red'}}>*</span></p>
                         <input required={true} onChange={handleInputChange} name="companyName"  className='w-100 py-2'/>
 
                         <p className='mt-3'>Model Name<span style={{color:'red'}}>*</span></p>
                         <input required={true} onChange={handleInputChange} name="modelName"  className='w-100 py-2'/>
+
+                        <p className='mt-3'>Model Year <span style={{color:'red'}}>*</span></p>
+                        <Datetime required={true} closeOnSelect dateFormat="YYYY" onChange={(date) => setModelYear(date  && date.year ? date.year() : null)}/>
 
                         <p className='mt-3'>Location<span style={{color:'red'}}>*</span></p>
                         <select required={true} onChange={handleInputChange} name="location" class="browser-default custom-select custom-select-lg mb-2" required={true}>
@@ -153,12 +162,6 @@ import { useEffect } from 'react';
 
                         <p className='mt-3'>Registered City<span style={{color:'red'}}>*</span></p>
                         <input required={true} onChange={handleInputChange} name="registeredCity"  type='text' className='w-100 py-2' />
-
-                        <p className='mt-3'>Title<span style={{color:'red'}}>*</span></p>
-                        <input required={true} onChange={handleInputChange} name="title"  className='w-100 py-2'/>
-
-                        <p className='mt-3'>Model Year <span style={{color:'red'}}>*</span></p>
-                        <Datetime required={true} closeOnSelect dateFormat="YYYY" onChange={(date) => setModelYear(date  && date.year ? date.year() : null)}/>
 
                         <p className='mt-3'>Color<span style={{color:'red'}}>*</span></p>
                         <input required={true} onChange={handleInputChange} name="color"  type='text' className='w-100 py-2' />
