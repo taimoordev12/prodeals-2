@@ -20,6 +20,7 @@ import { faLocationArrow, faPhone, faCar, faUser, faCalendar, faGasPump, faCog} 
 import Axios from '../../axios';
 import { Carousel } from 'react-responsive-carousel';
 
+
 // import { faTachometer} from '@fortawesome/react-fontawesome'
 
 const ProductDescripton=(props)=> {
@@ -35,9 +36,12 @@ const ProductDescripton=(props)=> {
       React.useEffect(
         ()=>{
           let stateUserData = JSON.parse(localStorage.getItem("user"))
+          const queryString = window.location.search;
+          const urlParams = new URLSearchParams(queryString);
+          const vehicleID = urlParams.get('vehicleID')
           setUserData(stateUserData)
           window.scrollTo(0, 0)
-          Axios.get(`/specific/ad/${props.location.state.vehicleID}`)
+          Axios.get(`/specific/ad/${vehicleID}`)
          .then(res => {
             setsearchedCarData (res.data[0])
         })
@@ -51,7 +55,6 @@ const ProductDescripton=(props)=> {
            setCount(vehicleID)
          })
        }
-       console.log(searchedCarData)
       // functions
     return (
        <div className="custom-container margin-class">
@@ -206,5 +209,4 @@ const ProductDescripton=(props)=> {
             </div>
     )
 }
-
-export default withRouter (ProductDescripton);
+export default  withRouter (ProductDescripton);

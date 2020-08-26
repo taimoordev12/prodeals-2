@@ -35,8 +35,7 @@ const CarsSection=()=>{
 
       const handleViewAdd = (vehicleID) => {
         history.push({
-          pathname: `${process.env.PUBLIC_URL}/product/description`,
-          state: { vehicleID: vehicleID }
+          pathname: `${process.env.PUBLIC_URL}/product/description/?vehicleID=${vehicleID}`
         });
       }
 

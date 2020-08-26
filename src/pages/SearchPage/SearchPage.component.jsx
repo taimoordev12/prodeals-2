@@ -13,6 +13,8 @@ import Axios from '../../axios';
 import { Spinner } from 'reactstrap';
 import MainFilters from '../../components/MainFilters'
 
+
+
 const SearchPage=(props)=> {
  
       // Default Constants
@@ -43,10 +45,9 @@ const SearchPage=(props)=> {
       // states
 
       // Functions
-      const redirectToDescription = (vehicleID) => {
+      const redirectToDescription = async (vehicleID) => {
         history.push({
-            pathname: `${process.env.PUBLIC_URL}/product/description`,
-            state: { vehicleID: vehicleID }
+            pathname: `${process.env.PUBLIC_URL}/product/description/?vehicleID=${vehicleID}`
           });
       }
       const  handleMinPriceChange = (selectedOption) => {
@@ -352,4 +353,5 @@ const SearchPage=(props)=> {
     )
 }
 
-export default withRouter (SearchPage);
+
+export default  withRouter (SearchPage);
